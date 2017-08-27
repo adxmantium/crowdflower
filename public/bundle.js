@@ -29782,11 +29782,10 @@ var App = function (_Component) {
 
 			return _react2.default.createElement(
 				'div',
-				{ id: '_main' },
-				_react2.default.createElement('nav', null),
+				null,
 				_react2.default.createElement(
 					'div',
-					null,
+					{ className: 'header' },
 					_react2.default.createElement(
 						'div',
 						{ className: 'title' },
@@ -29794,14 +29793,25 @@ var App = function (_Component) {
 					),
 					_react2.default.createElement(
 						'div',
-						{ className: 'task-btn add' },
-						'Add Task'
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'task-btn save' },
-						'Save'
+						null,
+						_react2.default.createElement(
+							'div',
+							{ className: 'task-btn add' },
+							'Add Task'
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'task-btn save' },
+							'Save'
+						)
 					)
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'tasks-container' },
+					[1, 2, 3].map(function (task) {
+						return _react2.default.createElement(Task, { key: task });
+					})
 				)
 			);
 		}
@@ -29816,16 +29826,22 @@ var Task = function Task(_ref) {
 
 	return _react2.default.createElement(
 		'div',
-		null,
-		_react2.default.createElement('i', { 'class': 'fa fa-camera-retro fa-lg' }),
-		' fa-lg',
+		{ className: 'task-item' },
 		_react2.default.createElement(
-			'span',
-			null,
-			'task'
+			'div',
+			{ className: 'reorder' },
+			_react2.default.createElement('i', { className: 'fa fa-th' })
 		),
-		_react2.default.createElement('i', { 'class': 'fa fa-camera-retro fa-lg' }),
-		' fa-lg'
+		_react2.default.createElement(
+			'div',
+			{ className: 'name' },
+			'TASK'
+		),
+		_react2.default.createElement(
+			'div',
+			{ className: 'trash' },
+			_react2.default.createElement('i', { className: 'fa fa-trash-o' })
+		)
 	);
 };
 
@@ -29835,7 +29851,7 @@ var mapStateToProps = function mapStateToProps(state, props) {
 	};
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(Team);
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 
 /***/ }),
 /* 276 */
@@ -30850,7 +30866,7 @@ exports = module.exports = __webpack_require__(298)(undefined);
 
 
 // module
-exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #bdc3c7; }\n\n#_App {\n  max-width: 1000px;\n  margin: auto; }\n\n.title {\n  font-weight: 600;\n  size: 24px; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 16;\n  padding: 20px 10px;\n  border-radius: 5px; }\n  .task-btn .add {\n    background-color: red; }\n  .task-btn .save {\n    background-color: blue; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n\n.task-item {\n  background-color: #fff;\n  border-radius: 5px; }\n\ni {\n  cursor: pointer; }\n", ""]);
+exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 1000px;\n  margin: auto; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 13px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */ }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0;\n  animation: _fadeInRight 0.4s; }\n\n@keyframes _fadeInRight {\n  0% {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px; }\n  .task-item .name {\n    cursor: text;\n    font-size: 14px;\n    font-weight: 600; }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n@media screen and (max-width: 699px) {\n  #_App {\n    padding: 0 10px; } }\n", ""]);
 
 // exports
 

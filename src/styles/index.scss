@@ -2,15 +2,13 @@
 
 @import './_global.scss';
 
-$br: 5px;
-
 body{
 	margin: 0;
 	padding: 0;
 	width: 100vw;
 	height: 100vh;
 	font-family: helvetica;
-	background-color: $silver;
+	background-color: $lightGray;
 }
 
 #_App{
@@ -18,9 +16,27 @@ body{
 	margin: auto;
 }
 
+nav{
+	background-color: $darkBlue;
+	height: 57px;
+}
+
+.header{
+	padding: 20px 0;
+
+	> div{
+		display: inline-block;
+		vertical-align: middle;
+		width: 50%;
+
+		&:last-child{ text-align: right; }
+	}
+}
+
 .title{
 	font-weight: 600;
-	size: 24px;
+	font-size: 30px;
+	color: $darkBlue;
 }
 
 .task-btn{
@@ -28,19 +44,57 @@ body{
 	vertical-align: middle;
 	color: #fff;
 	font-weight: 600;
-	font-size: 16;
-	padding: 20px 10px;
-	border-radius: $br;
+	font-size: 14px;
+	padding: 13px 15px;
+	@include bRadius(5px);
+	cursor: pointer;
+	@include noUserSelect();
 
-	.add{ background-color: red; }
-	.save{ background-color: blue; }
+	&.add{ background-color: $gray; }
+	&.save{ background-color: $green; }
 
 	&:last-child{ margin: 0 0 0 10px; }
+	&:active{ @include activeBtnClick(); }
 }
 
 .task-item{
 	background-color: #fff;
-	border-radius: $br;
+	@include bRadius(5px);
+	padding: 15px 35px;
+	box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);
+	min-height: 186px;
+	position: relative;
+	margin: 0 0 12px 0;
+	@include fadeInLeft(0.4s);
+
+	> div{ color: $gray; }
+
+	.reorder, .trash{
+		position: absolute;
+		top: 15px;
+		font-size: 12px;
+	}
+
+	.reorder{ 
+		cursor: move; 
+		left: 10px;
+	}
+
+	.name{ 
+		cursor: text; 
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.trash{ 
+		cursor: pointer; 
+		right: 20px;
+		font-size: 20px;
+	}
 }
 
-i{ cursor: pointer; }
+@media screen and (max-width: 699px){
+	#_App{
+		padding: 0 10px;
+	}	
+}

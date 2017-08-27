@@ -27,14 +27,18 @@ class App extends Component{
 		const { _app } = this.props;
 
 		return (
-			<div id="_main">
+			<div>
 
-				<nav />
-
-				<div>
+				<div className="header">
 					<div className="title">Tasks</div>
-					<div className="task-btn add">Add Task</div>
-					<div className="task-btn save">Save</div>
+					<div>
+						<div className="task-btn add">Add Task</div>
+						<div className="task-btn save">Save</div>
+					</div>
+				</div>
+
+				<div className="tasks-container">
+					{ [1,2,3].map(task => <Task key={task} />) }
 				</div>
 
 			</div>
@@ -44,10 +48,16 @@ class App extends Component{
 
 const Task = ({ name, onDelete }) => {
 	return (
-		<div>
-			<i class="fa fa-camera-retro fa-lg"></i> fa-lg
-			<span>task</span>
-			<i class="fa fa-camera-retro fa-lg"></i> fa-lg
+		<div className="task-item">
+			<div className="reorder">
+				<i className="fa fa-th" />
+			</div>
+
+			<div className="name">TASK</div>
+
+			<div className="trash">
+				<i className="fa fa-trash-o" />
+			</div>
 		</div>
 	);
 }
@@ -58,4 +68,4 @@ const mapStateToProps = (state, props) => {
   };
 } 
 
-export default connect(mapStateToProps)(Team);
+export default connect(mapStateToProps)(App);

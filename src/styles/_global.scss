@@ -1,16 +1,9 @@
 // /src/styles/_global.scss
 
-$wetasphault: #34495e;
-$nephritis: #27ae60;
-$silver: #bdc3c7;
-$gray: #797979;
-$lightgray: #f3f3f3;
-$error: #d90000;
-$test: 1px solid red;
-$Fs: #fff;
-$Es: #eee;
-$blue: #049AC5;
-$flatblack: #202020;
+$darkBlue: #2c3e50;
+$lightGray: #f5f7f9;
+$gray: #8e9fb1;
+$green: #5ac597;
 
 @mixin bRadius($radius) {
   -webkit-border-radius: $radius;
@@ -34,19 +27,6 @@ $flatblack: #202020;
 
 @mixin test($color){
 	border: 1px solid $color;
-}
-
-@mixin absolutely(){
-	position: absolute;
-	top: 0; right: 0; bottom: 0; left: 0;
-}
-
-@mixin clearfix(){
-	content: "";
-	visibility: hidden;
-	display: block;
-	height: 0;
-	clear: both;
 }
 
 @mixin placeholderColor($color: $majorBg) {
@@ -132,58 +112,6 @@ $flatblack: #202020;
 			transform: none;
 		}
 	}	
-}
-
-@mixin bounceEllipsis(){
-	animation: bounceEllipsis 0.3s infinite alternate;
-    -webkit-animation: bounceEllipsis 0.3s infinite alternate;
-    
-	@keyframes bounceEllipsis {
-	    from { transform: translateY(0px); }
-	    to { transform: translateY(-5px); }
-	}
-	@-webkit-keyframes bounceEllipsis {
-	    from { transform: translateY(0px); }
-	    to { transform: translateY(-5px); }
-	}
-}
-
-@mixin arrow($size, $color){
-	width: 0; 
-	height: 0; 
-	border-top: $size solid transparent;
-	border-bottom: $size solid transparent;
-	border-left: $size solid $color;
-}
-
-@mixin downArrow($size, $color){
-	@include arrow($size, $color);
-	transform: rotate(90deg);
-}
-
-@mixin leftArrow($size, $color){
-	@include arrow($size, $color);
-	transform: rotate(180deg);
-}
-
-@mixin upArrow($size, $color){
-	@include arrow($size, $color);
-	transform: rotate(270deg);
-}
-
-@mixin singleDivLoader($dimenstions, $speed, $b, $btop){
-	width: $dimenstions;
-    height: $dimenstions;
-    margin: auto;
-	animation: spin $speed infinite linear;
-	border: 2px solid $b;
-	@include bRadius(100%);
-	border-top: 2px solid $btop;
-
-	@keyframes spin {
-	    0% { transform: rotate(0deg); }
-	    100% { transform: rotate(360deg); }
-	}
 }
 
 .stylish-scrollbar-mini{

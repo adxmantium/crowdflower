@@ -29725,6 +29725,8 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _reactRedux = __webpack_require__(100);
@@ -29732,6 +29734,10 @@ var _reactRedux = __webpack_require__(100);
 var _react = __webpack_require__(7);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _task = __webpack_require__(307);
+
+var _task2 = _interopRequireDefault(_task);
 
 var _actions = __webpack_require__(276);
 
@@ -29744,6 +29750,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // /src/Team/index.js
+
+// components
+
 
 // actions 
 
@@ -29758,6 +29767,9 @@ var App = function (_Component) {
 		_classCallCheck(this, App);
 
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+		_this._addTask = _this._addTask.bind(_this);
+		_this._deleteTask = _this._deleteTask.bind(_this);
 
 		_this.state = {};
 		return _this;
@@ -29775,10 +29787,35 @@ var App = function (_Component) {
 			if (!_app.tasks) dispatch((0, _actions.getTasks)());
 		}
 	}, {
+		key: '_addTask',
+		value: function _addTask() {
+			var _props2 = this.props,
+			    dispatch = _props2.dispatch,
+			    tasks = _props2._app.tasks;
+
+			var last_task_added = null;
+
+			if (tasks && tasks.length > 0) last_task_added = tasks[0].id;
+
+			dispatch((0, _actions.addTask)({ last_task_added: last_task_added }));
+		}
+	}, {
+		key: '_deleteTask',
+		value: function _deleteTask(_ref) {
+			var id = _ref.id;
+			var dispatch = this.props.dispatch;
+
+
+			dispatch((0, _actions.deleteTask)({ id: id }));
+		}
+	}, {
 		key: 'render',
 		value: function render() {
+			var _this2 = this;
+
 			var _app = this.props._app;
 
+			var _tasks = _app.tasks || [];
 
 			return _react2.default.createElement(
 				'div',
@@ -29796,7 +29833,7 @@ var App = function (_Component) {
 						null,
 						_react2.default.createElement(
 							'div',
-							{ className: 'task-btn add' },
+							{ className: 'task-btn add', onClick: this._addTask },
 							'Add Task'
 						),
 						_react2.default.createElement(
@@ -29809,8 +29846,8 @@ var App = function (_Component) {
 				_react2.default.createElement(
 					'div',
 					{ className: 'tasks-container' },
-					[1, 2, 3].map(function (task) {
-						return _react2.default.createElement(Task, { key: task });
+					_tasks.map(function (task) {
+						return _react2.default.createElement(_task2.default, _extends({ key: task.id }, task, { deleteTask: _this2._deleteTask }));
 					})
 				)
 			);
@@ -29819,31 +29856,6 @@ var App = function (_Component) {
 
 	return App;
 }(_react.Component);
-
-var Task = function Task(_ref) {
-	var name = _ref.name,
-	    onDelete = _ref.onDelete;
-
-	return _react2.default.createElement(
-		'div',
-		{ className: 'task-item' },
-		_react2.default.createElement(
-			'div',
-			{ className: 'reorder' },
-			_react2.default.createElement('i', { className: 'fa fa-th' })
-		),
-		_react2.default.createElement(
-			'div',
-			{ className: 'name' },
-			'TASK'
-		),
-		_react2.default.createElement(
-			'div',
-			{ className: 'trash' },
-			_react2.default.createElement('i', { className: 'fa fa-trash-o' })
-		)
-	);
-};
 
 var mapStateToProps = function mapStateToProps(state, props) {
 	return {
@@ -29863,7 +29875,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.saveTask = exports.getTasks = undefined;
+exports.saveTask = exports.getTasks = exports.deleteTask = exports.addTask = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // /actions/index.js
 
@@ -29877,6 +29889,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var routes = {
   tasks: 'http://cfassignment.herokuapp.com/adam adams/tasks'
+};
+
+var addTask = exports.addTask = function addTask(_ref) {
+  var last_task_added = _ref.last_task_added;
+  return {
+    type: '_APP:ADD_TASK',
+    payload: { last_task_added: last_task_added }
+  };
+};
+
+var deleteTask = exports.deleteTask = function deleteTask(_ref2) {
+  var task_id = _ref2.id;
+  return {
+    type: '_APP:DELETE_TASK',
+    payload: { task_id: task_id }
+  };
 };
 
 var getTasks = exports.getTasks = function getTasks() {
@@ -29928,24 +29956,24 @@ var saveTask = exports.saveTask = function saveTask() {
   };
 };
 
-var pendingAction = function pendingAction(_ref) {
+var pendingAction = function pendingAction(_ref3) {
   var _extends2;
 
-  var pending = _ref.pending,
-      type = _ref.type,
-      _ref$data = _ref.data,
-      data = _ref$data === undefined ? {} : _ref$data;
+  var pending = _ref3.pending,
+      type = _ref3.type,
+      _ref3$data = _ref3.data,
+      data = _ref3$data === undefined ? {} : _ref3$data;
   return {
     type: '_APP:' + (type || 'GET_REQUEST_PENDING'),
     payload: _extends({}, data, (_extends2 = {}, _defineProperty(_extends2, pending, true), _defineProperty(_extends2, pending + '_err', false), _extends2))
   };
 };
 
-var errAction = function errAction(_ref2) {
+var errAction = function errAction(_ref4) {
   var _payload;
 
-  var pending = _ref2.pending,
-      err = _ref2.err;
+  var pending = _ref4.pending,
+      err = _ref4.err;
   return {
     type: '_APP:GET_REQUEST_PENDING_ERR',
     payload: (_payload = {}, _defineProperty(_payload, pending, false), _defineProperty(_payload, pending + '_err', err), _payload)
@@ -31690,35 +31718,112 @@ function isPromise(value) {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 exports.default = function () {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : init;
-    var action = arguments[1];
+	var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : init;
+	var action = arguments[1];
 
 
-    switch (action.type) {
+	var tasks = null;
 
-        case '_APP:SAVED_TASKS':
-        case '_APP:SAVING_TASKS':
-        case '_APP:FETCHED_TASKS':
-        case '_APP:FETCHING_TASKS':
-            return _extends({}, state, action.payload);
+	switch (action.type) {
 
-        default:
-            return state;
+		case '_APP:SAVED_TASKS':
+		case '_APP:SAVING_TASKS':
+		case '_APP:FETCHED_TASKS':
+		case '_APP:FETCHING_TASKS':
+			return _extends({}, state, action.payload);
 
-    }
+		case '_APP:ADD_TASK':
+			var last_task_added = action.payload.last_task_added;
+
+			var newTask = {
+				id: 1,
+				name: 'TASK'
+			};
+
+			if (last_task_added) newTask.id = last_task_added + 1;
+
+			tasks = [newTask].concat(_toConsumableArray(state.tasks));
+
+			return _extends({}, state, { tasks: tasks });
+
+		case '_APP:DELETE_TASK':
+			var task_id = action.payload.task_id;
+
+			// only return tasks that aren't equal to the task_id to delete
+
+			tasks = state.tasks.reduce(function (all_tasks, task) {
+
+				return task.id != task_id ? [].concat(_toConsumableArray(all_tasks), [task]) : all_tasks;
+			}, []);
+
+			return _extends({}, state, { tasks: tasks });
+
+		default:
+			return state;
+
+	}
 };
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 // /reducers/index.js
 
-var init = {};
+var init = {
+	tasks: []
+};
 
 ;
+
+/***/ }),
+/* 307 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = __webpack_require__(7);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (_ref) {
+	var id = _ref.id,
+	    name = _ref.name,
+	    deleteTask = _ref.deleteTask;
+
+	return _react2.default.createElement(
+		"div",
+		{ className: "task-item" },
+		_react2.default.createElement(
+			"div",
+			{ className: "reorder" },
+			_react2.default.createElement("i", { className: "fa fa-th" })
+		),
+		_react2.default.createElement(
+			"div",
+			{ className: "name" },
+			name
+		),
+		_react2.default.createElement(
+			"div",
+			{ className: "trash", onClick: function onClick() {
+					return deleteTask({ id: id });
+				} },
+			_react2.default.createElement("i", { className: "fa fa-trash-o" })
+		)
+	);
+}; // /src/App/task.js
 
 /***/ })
 /******/ ]);

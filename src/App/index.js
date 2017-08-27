@@ -3,8 +3,11 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
+// components
+import Task from './task'
+
 // actions 
-import { getTasks } from './../actions'
+import { getTasks, addTask, deleteTask } from './../actions'
 
 // styles
 import './../styles/index.scss'
@@ -12,6 +15,9 @@ import './../styles/index.scss'
 class App extends Component{
 	constructor(props){
 		super(props);
+
+		this._addTask = this._addTask.bind(this);
+		this._deleteTask = this._deleteTask.bind(this);
 
 		this.state = {};
 	}
@@ -23,8 +29,24 @@ class App extends Component{
 		if( !_app.tasks ) dispatch( getTasks() );
 	}
 
+	_addTask(){
+		const { dispatch, _app: { tasks } } = this.props;
+		let last_task_added = null;
+
+		if( tasks && tasks.length > 0 ) last_task_added = tasks[0].id;
+
+		dispatch( addTask({ last_task_added }) );
+	}
+
+	_deleteTask({ id }){
+		const { dispatch } = this.props;
+
+		dispatch( deleteTask({ id }) );
+	}
+
 	render(){
 		const { _app } = this.props;
+		const _tasks = _app.tasks || [];
 
 		return (
 			<div>
@@ -32,34 +54,18 @@ class App extends Component{
 				<div className="header">
 					<div className="title">Tasks</div>
 					<div>
-						<div className="task-btn add">Add Task</div>
+						<div className="task-btn add" onClick={ this._addTask }>Add Task</div>
 						<div className="task-btn save">Save</div>
 					</div>
 				</div>
 
 				<div className="tasks-container">
-					{ [1,2,3].map(task => <Task key={task} />) }
+					{ _tasks.map(task => <Task key={task.id} {...task} deleteTask={this._deleteTask} />) }
 				</div>
 
 			</div>
 		);
 	}
-}
-
-const Task = ({ name, onDelete }) => {
-	return (
-		<div className="task-item">
-			<div className="reorder">
-				<i className="fa fa-th" />
-			</div>
-
-			<div className="name">TASK</div>
-
-			<div className="trash">
-				<i className="fa fa-trash-o" />
-			</div>
-		</div>
-	);
 }
 
 const mapStateToProps = (state, props) => {

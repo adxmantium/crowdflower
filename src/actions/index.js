@@ -6,6 +6,16 @@ const routes = {
   tasks: 'http://cfassignment.herokuapp.com/adam adams/tasks',
 }
 
+export const addTask = ({ last_task_added }) => ({
+  type: '_APP:ADD_TASK',
+  payload: { last_task_added }
+});
+
+export const deleteTask = ({ id: task_id }) => ({
+  type: '_APP:DELETE_TASK',
+  payload: { task_id }
+});
+
 export const getTasks = () => {
   const pending = 'fetching_tasks',
         done = 'fetched_tasks';

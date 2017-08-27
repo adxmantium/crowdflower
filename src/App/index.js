@@ -7,7 +7,12 @@ import React, { Component } from 'react'
 import Task from './task'
 
 // actions 
-import { getTasks, addTask, deleteTask } from './../actions'
+import { 
+	addTask, 
+	getTasks, 
+	saveTasks,
+	deleteTask,
+} from './../actions'
 
 // styles
 import './../styles/index.scss'
@@ -17,6 +22,7 @@ class App extends Component{
 		super(props);
 
 		this._addTask = this._addTask.bind(this);
+		this._saveTasks = this._saveTasks.bind(this);
 		this._deleteTask = this._deleteTask.bind(this);
 
 		this.state = {};
@@ -44,6 +50,12 @@ class App extends Component{
 		dispatch( deleteTask({ id }) );
 	}
 
+	_saveTasks(){
+		const { dispatch, _app: { tasks } } = this.props;
+
+		if( tasks && tasks.length > 0 ) dispatch( saveTasks({ tasks }) );
+	}
+
 	render(){
 		const { _app } = this.props;
 		const _tasks = _app.tasks || [];
@@ -54,14 +66,21 @@ class App extends Component{
 				<div className="header">
 					<div className="title">Tasks</div>
 					<div>
-						<div className="task-btn add" onClick={ this._addTask }>Add Task</div>
-						<div className="task-btn save">Save</div>
+						<button className="task-btn add" onClick={ this._addTask }>Add Task</button>
+						<button className="task-btn save" onClick={ this._saveTasks }>Save</button>
 					</div>
 				</div>
 
 				<div className="tasks-container">
 					{ _tasks.map(task => <Task key={task.id} {...task} deleteTask={this._deleteTask} />) }
 				</div>
+
+				{ _app.saved && 
+					<div className="alert">
+						<div>Tasks saved successfully.</div>
+						<div>&times;</div>
+					</div> 
+				}
 
 			</div>
 		);

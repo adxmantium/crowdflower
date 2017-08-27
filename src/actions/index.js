@@ -40,7 +40,7 @@ export const getTasks = () => {
 	}
 }
 
-export const saveTask = () => {
+export const saveTasks = () => {
   const pending = 'saving_tasks',
         done = 'saved_tasks',
         data = {saved: false};

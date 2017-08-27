@@ -14,6 +14,7 @@ body{
 #_App{
 	max-width: 1000px;
 	margin: auto;
+	position: relative;
 }
 
 nav{
@@ -45,10 +46,12 @@ nav{
 	color: #fff;
 	font-weight: 600;
 	font-size: 14px;
-	padding: 13px 15px;
+	padding: 10px 15px;
 	@include bRadius(5px);
 	cursor: pointer;
 	@include noUserSelect();
+	outline: none;
+	border: none;
 
 	&.add{ background-color: $gray; }
 	&.save{ background-color: $green; }
@@ -90,6 +93,29 @@ nav{
 		cursor: pointer; 
 		right: 20px;
 		font-size: 20px;
+	}
+}
+
+.alert{
+	border: 2px solid $green;
+	background-color: $lightGreen;
+	@include bRadius(5px);
+	position: absolute;
+	bottom: 50px;
+	right: 20px;
+	color: $green;
+	padding: 10px 10px 10px 20px;
+	font-size: 13px;
+	font-weight: 600;
+
+	> div{
+		display: inline-block;
+		vertical-align: middle;
+
+		&:last-child{ 
+			margin: 0 0 0 200px; 
+			font-size: 18px;
+		}
 	}
 }
 

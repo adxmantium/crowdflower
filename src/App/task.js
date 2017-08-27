@@ -4,7 +4,7 @@ import React from 'react'
 
 export default ({ id, name, deleteTask }) => {
 	return (
-		<div className="task-item">
+		<div className="task-item" draggable="true">
 			<div className="reorder">
 				<i className="fa fa-th" />
 			</div>

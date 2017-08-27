@@ -54,7 +54,11 @@ nav{
 	border: none;
 
 	&.add{ background-color: $gray; }
-	&.save{ background-color: $green; }
+	&.save{ 
+		background-color: $green; 
+		&[disabled]{ opacity: 0.3; }
+	}
+
 
 	&:last-child{ margin: 0 0 0 10px; }
 	&:active{ @include activeBtnClick(); }

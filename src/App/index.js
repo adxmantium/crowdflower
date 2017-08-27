@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 
 // components
 import Task from './task'
+import TaskActionButton from './taskActionButton'
 
 // actions 
 import { 
@@ -78,16 +79,21 @@ class App extends Component{
 
 				<div className="header">
 					<div className="title">Tasks</div>
-					
-					<div>
-						<button 
-							className="task-btn add" 
-							onClick={ this._addTask }>Add Task</button>
 
-						<button 
-							className="task-btn save" 
+					<div>
+
+						<TaskActionButton
+							label="Add Task" 
+							classNames="task-btn add" 
+							disabled={false}
+							onClick={ this._addTask } />
+
+						<TaskActionButton
+							label="Save" 
+							classNames="task-btn save" 
 							disabled={ disabled }
-							onClick={ this._saveTasks }>Save</button>
+							onClick={ this._saveTasks } />
+
 					</div>
 				</div>
 

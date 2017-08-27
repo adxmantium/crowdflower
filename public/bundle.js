@@ -29739,6 +29739,10 @@ var _task = __webpack_require__(307);
 
 var _task2 = _interopRequireDefault(_task);
 
+var _taskActionButton = __webpack_require__(308);
+
+var _taskActionButton2 = _interopRequireDefault(_taskActionButton);
+
 var _actions = __webpack_require__(276);
 
 __webpack_require__(296);
@@ -29857,21 +29861,16 @@ var App = function (_Component) {
 					_react2.default.createElement(
 						'div',
 						null,
-						_react2.default.createElement(
-							'button',
-							{
-								className: 'task-btn add',
-								onClick: this._addTask },
-							'Add Task'
-						),
-						_react2.default.createElement(
-							'button',
-							{
-								className: 'task-btn save',
-								disabled: disabled,
-								onClick: this._saveTasks },
-							'Save'
-						)
+						_react2.default.createElement(_taskActionButton2.default, {
+							label: 'Add Task',
+							classNames: 'task-btn add',
+							disabled: false,
+							onClick: this._addTask }),
+						_react2.default.createElement(_taskActionButton2.default, {
+							label: 'Save',
+							classNames: 'task-btn save',
+							disabled: disabled,
+							onClick: this._saveTasks })
 					)
 				),
 				_react2.default.createElement(
@@ -31870,6 +31869,38 @@ exports.default = function (_ref) {
 				} },
 			_react2.default.createElement("i", { className: "fa fa-trash-o" })
 		)
+	);
+}; // /src/App/task.js
+
+/***/ }),
+/* 308 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = __webpack_require__(7);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (_ref) {
+	var label = _ref.label,
+	    disabled = _ref.disabled,
+	    classNames = _ref.classNames,
+	    onClick = _ref.onClick;
+	return _react2.default.createElement(
+		'button',
+		{
+			className: classNames,
+			disabled: disabled,
+			onClick: onClick },
+		label
 	);
 }; // /src/App/task.js
 

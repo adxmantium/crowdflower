@@ -6,17 +6,20 @@ const routes = {
   tasks: 'https://cfassignment.herokuapp.com/adam adams/tasks',
 }
 
+const resetData = {
+  saved: false,
+  err_msg: false,
+  saving_tasks_err: false,
+}
+
 export const closeAlert = () => ({
   type: '_APP:CLOSE_ALERT',
-  payload: {
-    saved: false,
-    saving_tasks_err: false,
-  }
+  payload: resetData, 
 });
 
 export const resetSaved = () => ({
   type: '_APP:RESET_SAVED',
-  payload: {saved: false},
+  payload: resetData,
 });
 
 export const addTask = ({ last_task_added }) => ({

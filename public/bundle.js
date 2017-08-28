@@ -29739,6 +29739,10 @@ var _task = __webpack_require__(276);
 
 var _task2 = _interopRequireDefault(_task);
 
+var _alert = __webpack_require__(309);
+
+var _alert2 = _interopRequireDefault(_alert);
+
 var _taskActionButton = __webpack_require__(277);
 
 var _taskActionButton2 = _interopRequireDefault(_taskActionButton);
@@ -29935,34 +29939,10 @@ var App = function (_Component) {
 							deleteTask: _this2._deleteTask }));
 					})
 				),
-				_app.saved && _react2.default.createElement(
-					'div',
-					{ className: 'alert' },
-					_react2.default.createElement(
-						'div',
-						null,
-						'Tasks saved successfully.'
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'close', onClick: this._closeAlert },
-						'\xD7'
-					)
-				),
-				_app.saving_tasks_err && _react2.default.createElement(
-					'div',
-					{ className: 'alert err' },
-					_react2.default.createElement(
-						'div',
-						null,
-						_app.err_msg
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'close', onClick: this._closeAlert },
-						'\xD7'
-					)
-				)
+				(_app.saved || _app.saving_tasks_err) && _react2.default.createElement(_alert2.default, {
+					error: !!_app.saving_tasks_err,
+					close: this._closeAlert,
+					msg: _app.err_msg || 'Tasks saved successfully.' })
 			);
 		}
 	}]);
@@ -30081,20 +30061,23 @@ var routes = {
   tasks: 'https://cfassignment.herokuapp.com/adam adams/tasks'
 };
 
+var resetData = {
+  saved: false,
+  err_msg: false,
+  saving_tasks_err: false
+};
+
 var closeAlert = exports.closeAlert = function closeAlert() {
   return {
     type: '_APP:CLOSE_ALERT',
-    payload: {
-      saved: false,
-      saving_tasks_err: false
-    }
+    payload: resetData
   };
 };
 
 var resetSaved = exports.resetSaved = function resetSaved() {
   return {
     type: '_APP:RESET_SAVED',
-    payload: { saved: false }
+    payload: resetData
   };
 };
 
@@ -32028,6 +32011,43 @@ var init = {
 };
 
 ;
+
+/***/ }),
+/* 309 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (_ref) {
+	var msg = _ref.msg,
+	    close = _ref.close,
+	    error = _ref.error;
+	return _react2.default.createElement(
+		'div',
+		{ className: 'alert ' + (error && 'err') },
+		_react2.default.createElement(
+			'div',
+			null,
+			msg
+		),
+		_react2.default.createElement(
+			'div',
+			{ className: 'close', onClick: close },
+			'\xD7'
+		)
+	);
+}; // /src/App/task.js
 
 /***/ })
 /******/ ]);

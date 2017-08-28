@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 
 // components
 import Task from './task'
+import Alert from './alert'
 import TaskActionButton from './taskActionButton'
 
 // actions 
@@ -143,19 +144,11 @@ class App extends Component{
 											deleteTask={this._deleteTask} />) }
 				</div>
 
-				{ _app.saved && 
-					<div className="alert">
-						<div>Tasks saved successfully.</div>
-						<div className="close" onClick={ this._closeAlert }>&times;</div>
-					</div> 
-				}
-
-				{ _app.saving_tasks_err && 
-					<div className="alert err">
-						<div>{ _app.err_msg }</div>
-						<div className="close" onClick={ this._closeAlert }>&times;</div>
-					</div> 
-				}
+				{ (_app.saved || _app.saving_tasks_err) && 
+					<Alert
+						error={ !!_app.saving_tasks_err }
+						close={ this._closeAlert }
+						msg={ _app.err_msg || 'Tasks saved successfully.' } /> }
 
 			</div>
 		);
@@ -168,4 +161,4 @@ const mapStateToProps = (state, props) => {
   };
 } 
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(App)	;

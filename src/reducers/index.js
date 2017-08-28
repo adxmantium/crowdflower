@@ -69,7 +69,7 @@ export default function(state = init, action) {
 			newState = {...state};
 			
 			// edit the task that matches the payload id and update task w/ new name
-			newState.tasks = state.tasks.map(task => task.id == id ? {...task, name} : task);
+			newState.tasks = state.tasks.map(task => task.id == id ? {...task, edited: true, name} : task);
 
 			return newState;
 

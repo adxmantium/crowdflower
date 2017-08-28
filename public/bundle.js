@@ -29979,43 +29979,88 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(6);
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function (_ref) {
-	var id = _ref.id,
-	    name = _ref.name,
-	    edited = _ref.edited,
-	    editTask = _ref.editTask,
-	    deleteTask = _ref.deleteTask;
-	return _react2.default.createElement(
-		"div",
-		{ className: "task-item", draggable: "true" },
-		_react2.default.createElement(
-			"div",
-			{ className: "reorder" },
-			_react2.default.createElement("i", { className: "fa fa-th" })
-		),
-		_react2.default.createElement("input", {
-			type: "text",
-			className: "edit-field",
-			value: name || '',
-			placeholder: "Enter task name",
-			onChange: function onChange(e) {
-				return editTask({ id: id, name: e.target.value });
-			} }),
-		_react2.default.createElement(
-			"div",
-			{ className: "trash", onClick: function onClick() {
-					return deleteTask({ id: id });
-				} },
-			_react2.default.createElement("i", { className: "fa fa-trash-o" })
-		)
-	);
-}; // /src/App/task.js
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // /src/App/task.js
+
+var Task = function (_Component) {
+	_inherits(Task, _Component);
+
+	function Task(props) {
+		_classCallCheck(this, Task);
+
+		var _this = _possibleConstructorReturn(this, (Task.__proto__ || Object.getPrototypeOf(Task)).call(this, props));
+
+		_this._input = null;
+		return _this;
+	}
+
+	_createClass(Task, [{
+		key: "componentDidMount",
+		value: function componentDidMount() {
+			var edited = this.props.edited;
+
+			if (!edited) this._input.focus();
+		}
+	}, {
+		key: "render",
+		value: function render() {
+			var _this2 = this;
+
+			var _props = this.props,
+			    id = _props.id,
+			    name = _props.name,
+			    editTask = _props.editTask,
+			    deleteTask = _props.deleteTask;
+
+
+			return _react2.default.createElement(
+				"div",
+				{ className: "task-item", draggable: "true" },
+				_react2.default.createElement(
+					"div",
+					{ className: "reorder" },
+					_react2.default.createElement("i", { className: "fa fa-th" })
+				),
+				_react2.default.createElement("input", {
+					type: "text",
+					value: name || '',
+					className: "edit-field",
+					placeholder: "Enter task name",
+					onBlur: function onBlur(e) {
+						return editTask({ id: id, name: name });
+					},
+					ref: function ref(input) {
+						_this2._input = input;
+					},
+					onChange: function onChange(e) {
+						return editTask({ id: id, name: e.target.value });
+					} }),
+				_react2.default.createElement(
+					"div",
+					{ className: "trash", onClick: function onClick() {
+							return deleteTask({ id: id });
+						} },
+					_react2.default.createElement("i", { className: "fa fa-trash-o" })
+				)
+			);
+		}
+	}]);
+
+	return Task;
+}(_react.Component);
+
+exports.default = Task;
 
 /***/ }),
 /* 277 */
@@ -31117,7 +31162,7 @@ exports = module.exports = __webpack_require__(300)(undefined);
 
 
 // module
-exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 1000px;\n  margin: auto;\n  position: relative; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 10px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */\n  outline: none;\n  border: none; }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n    .task-btn.save[disabled] {\n      opacity: 0.3; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 60px 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0;\n  animation: _fadeInRight 0.4s; }\n\n@keyframes _fadeInRight {\n  0% {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px;\n    transform: rotate(90deg); }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n.edit-field {\n  border: none;\n  outline-width: 2px;\n  font-size: 16px;\n  width: 100%;\n  color: #2c3e50;\n  font-weight: 600; }\n  .edit-field:focus {\n    outline-color: #5ac597;\n    padding: 5px 0 5px 10px; }\n\n.alert {\n  border: 2px solid #5ac597;\n  background-color: #f6fffb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  position: absolute;\n  bottom: 50px;\n  right: 20px;\n  color: #5ac597;\n  padding: 10px 10px 10px 20px;\n  font-size: 13px;\n  font-weight: 600;\n  min-width: 400px; }\n  .alert.err {\n    color: #e74c3c;\n    border: 2px solid #e74c3c;\n    background-color: #f7c1bb; }\n  .alert > div {\n    display: inline-block;\n    vertical-align: middle; }\n  .alert .close {\n    cursor: pointer;\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    margin: auto 8px auto auto;\n    height: 23px;\n    font-size: 18px; }\n\n.loading {\n  color: #2c3e50;\n  margin: 0 0 10px;\n  animation: _fadeInLeft 0.4s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n\n.error {\n  color: #e74c3c;\n  border: 2px solid #e74c3c;\n  background-color: #f7c1bb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  font-size: 14px;\n  padding: 10px;\n  cursor: pointer;\n  display: inline-block;\n  animation: _fadeInLeft 0.4s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .error > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .error > div:last-child {\n      margin: 0 0 0 5px; }\n\n.empty-msg {\n  color: #2c3e50; }\n\n@media screen and (max-width: 470px) {\n  .alert .close {\n    min-width: initial;\n    width: 100%; } }\n\n@media screen and (max-width: 1007px) {\n  #_App {\n    padding: 0 10px; } }\n", ""]);
+exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 1000px;\n  margin: auto;\n  position: relative; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 10px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */\n  outline: none;\n  border: none; }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n    .task-btn.save[disabled] {\n      opacity: 0.3; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 60px 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0; }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px;\n    transform: rotate(90deg); }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n.edit-field {\n  border: none;\n  outline-width: 2px;\n  font-size: 16px;\n  width: 100%;\n  color: #2c3e50;\n  font-weight: 600; }\n  .edit-field:focus {\n    outline-color: #5ac597;\n    padding: 5px 0 5px 10px; }\n\n.alert {\n  border: 2px solid #5ac597;\n  background-color: #f6fffb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  position: absolute;\n  bottom: 50px;\n  right: 20px;\n  color: #5ac597;\n  padding: 10px 10px 10px 20px;\n  font-size: 13px;\n  font-weight: 600;\n  min-width: 400px; }\n  .alert.err {\n    color: #e74c3c;\n    border: 2px solid #e74c3c;\n    background-color: #f7c1bb; }\n  .alert > div {\n    display: inline-block;\n    vertical-align: middle; }\n  .alert .close {\n    cursor: pointer;\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    margin: auto 8px auto auto;\n    height: 23px;\n    font-size: 18px; }\n\n.loading {\n  color: #2c3e50;\n  margin: 0 0 10px;\n  animation: _fadeInLeft 0.2s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n\n.error {\n  color: #e74c3c;\n  border: 2px solid #e74c3c;\n  background-color: #f7c1bb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  font-size: 14px;\n  padding: 10px;\n  cursor: pointer;\n  display: inline-block;\n  animation: _fadeInLeft 0.2s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .error > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .error > div:last-child {\n      margin: 0 0 0 5px; }\n\n.empty-msg {\n  color: #2c3e50; }\n\n@media screen and (max-width: 470px) {\n  .alert .close {\n    min-width: initial;\n    width: 100%; } }\n\n@media screen and (max-width: 1007px) {\n  #_App {\n    padding: 0 10px; } }\n", ""]);
 
 // exports
 
@@ -32016,7 +32061,7 @@ exports.default = function () {
 
 			// edit the task that matches the payload id and update task w/ new name
 			newState.tasks = state.tasks.map(function (task) {
-				return task.id == id ? _extends({}, task, { name: name }) : task;
+				return task.id == id ? _extends({}, task, { edited: true, name: name }) : task;
 			});
 
 			return newState;

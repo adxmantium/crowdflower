@@ -27,6 +27,11 @@ export const addTask = ({ last_task_added }) => ({
   payload: { last_task_added }
 });
 
+export const editTask = payload => ({
+  type: '_APP:EDIT_TASK',
+  payload
+});
+
 export const deleteTask = ({ id: task_id }) => ({
   type: '_APP:DELETE_TASK',
   payload: { task_id }

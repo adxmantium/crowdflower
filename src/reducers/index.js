@@ -54,6 +54,7 @@ export default function(state = init, action) {
 			const newTask = {
 				id: 1,
 				name: 'TASK',
+				edited: false,
 			};
 
 			if( last_task_added ) newTask.id = last_task_added + 1;
@@ -61,6 +62,16 @@ export default function(state = init, action) {
 			tasks = [newTask, ...state.tasks];
 
 			return {...state, tasks};
+
+		case '_APP:EDIT_TASK':
+			const { id, name } = action.payload;
+
+			newState = {...state};
+			
+			// edit the task that matches the payload id and update task w/ new name
+			newState.tasks = state.tasks.map(task => task.id == id ? {...task, name} : task);
+
+			return newState;
 
 		case '_APP:DELETE_TASK':
 			const { task_id } = action.payload;

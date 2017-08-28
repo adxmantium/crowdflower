@@ -29777,6 +29777,7 @@ var App = function (_Component) {
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
 		_this._addTask = _this._addTask.bind(_this);
+		_this._editTask = _this._editTask.bind(_this);
 		_this._getTasks = _this._getTasks.bind(_this);
 		_this._saveTasks = _this._saveTasks.bind(_this);
 		_this._deleteTask = _this._deleteTask.bind(_this);
@@ -29836,6 +29837,13 @@ var App = function (_Component) {
 			if (tasks && tasks.length > 0) last_task_added = tasks[0].id;
 
 			dispatch((0, _actions.addTask)({ last_task_added: last_task_added }));
+		}
+	}, {
+		key: '_editTask',
+		value: function _editTask(task) {
+			var dispatch = this.props.dispatch;
+
+			dispatch((0, _actions.editTask)(task));
 		}
 	}, {
 		key: '_deleteTask',
@@ -29937,6 +29945,7 @@ var App = function (_Component) {
 						return _react2.default.createElement(_task2.default, _extends({
 							key: task.id
 						}, task, {
+							editTask: _this2._editTask,
 							deleteTask: _this2._deleteTask }));
 					})
 				),
@@ -29979,6 +29988,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function (_ref) {
 	var id = _ref.id,
 	    name = _ref.name,
+	    edited = _ref.edited,
+	    editTask = _ref.editTask,
 	    deleteTask = _ref.deleteTask;
 	return _react2.default.createElement(
 		"div",
@@ -29988,11 +29999,14 @@ exports.default = function (_ref) {
 			{ className: "reorder" },
 			_react2.default.createElement("i", { className: "fa fa-th" })
 		),
-		_react2.default.createElement(
-			"div",
-			{ className: "name" },
-			name
-		),
+		_react2.default.createElement("input", {
+			type: "text",
+			className: "edit-field",
+			value: name || '',
+			placeholder: "Enter task name",
+			onChange: function onChange(e) {
+				return editTask({ id: id, name: e.target.value });
+			} }),
 		_react2.default.createElement(
 			"div",
 			{ className: "trash", onClick: function onClick() {
@@ -30045,7 +30059,7 @@ exports.default = function (_ref) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.saveTasks = exports.getTasks = exports.deleteTask = exports.addTask = exports.resetSaved = exports.closeAlert = undefined;
+exports.saveTasks = exports.getTasks = exports.deleteTask = exports.editTask = exports.addTask = exports.resetSaved = exports.closeAlert = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // /actions/index.js
 
@@ -30086,6 +30100,13 @@ var addTask = exports.addTask = function addTask(_ref) {
   return {
     type: '_APP:ADD_TASK',
     payload: { last_task_added: last_task_added }
+  };
+};
+
+var editTask = exports.editTask = function editTask(payload) {
+  return {
+    type: '_APP:EDIT_TASK',
+    payload: payload
   };
 };
 
@@ -31096,7 +31117,7 @@ exports = module.exports = __webpack_require__(300)(undefined);
 
 
 // module
-exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 1000px;\n  margin: auto;\n  position: relative; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 10px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */\n  outline: none;\n  border: none; }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n    .task-btn.save[disabled] {\n      opacity: 0.3; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0;\n  animation: _fadeInRight 0.4s; }\n\n@keyframes _fadeInRight {\n  0% {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px; }\n  .task-item .name {\n    cursor: text;\n    font-size: 14px;\n    font-weight: 600; }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n.alert {\n  border: 2px solid #5ac597;\n  background-color: #f6fffb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  position: absolute;\n  bottom: 50px;\n  right: 20px;\n  color: #5ac597;\n  padding: 10px 10px 10px 20px;\n  font-size: 13px;\n  font-weight: 600;\n  min-width: 400px; }\n  .alert.err {\n    color: #e74c3c;\n    border: 2px solid #e74c3c;\n    background-color: #f7c1bb; }\n  .alert > div {\n    display: inline-block;\n    vertical-align: middle; }\n  .alert .close {\n    cursor: pointer;\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    margin: auto 8px auto auto;\n    height: 23px;\n    font-size: 18px; }\n\n.loading {\n  color: #2c3e50;\n  margin: 0 0 10px;\n  animation: _fadeInLeft 0.4s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n\n.error {\n  color: #e74c3c;\n  border: 2px solid #e74c3c;\n  background-color: #f7c1bb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  font-size: 14px;\n  padding: 10px;\n  cursor: pointer;\n  display: inline-block;\n  animation: _fadeInLeft 0.4s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .error > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .error > div:last-child {\n      margin: 0 0 0 5px; }\n\n.empty-msg {\n  color: #2c3e50; }\n\n@media screen and (max-width: 470px) {\n  .alert .close {\n    min-width: initial;\n    width: 100%; } }\n\n@media screen and (max-width: 1007px) {\n  #_App {\n    padding: 0 10px; } }\n", ""]);
+exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 1000px;\n  margin: auto;\n  position: relative; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 10px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */\n  outline: none;\n  border: none; }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n    .task-btn.save[disabled] {\n      opacity: 0.3; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 60px 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0;\n  animation: _fadeInRight 0.4s; }\n\n@keyframes _fadeInRight {\n  0% {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px; }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n.edit-field {\n  border: none;\n  outline-width: 2px;\n  font-size: 16px;\n  width: 100%;\n  color: #2c3e50;\n  font-weight: 600; }\n  .edit-field:focus {\n    outline-color: #5ac597;\n    padding: 5px 0 5px 10px; }\n\n.alert {\n  border: 2px solid #5ac597;\n  background-color: #f6fffb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  position: absolute;\n  bottom: 50px;\n  right: 20px;\n  color: #5ac597;\n  padding: 10px 10px 10px 20px;\n  font-size: 13px;\n  font-weight: 600;\n  min-width: 400px; }\n  .alert.err {\n    color: #e74c3c;\n    border: 2px solid #e74c3c;\n    background-color: #f7c1bb; }\n  .alert > div {\n    display: inline-block;\n    vertical-align: middle; }\n  .alert .close {\n    cursor: pointer;\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    margin: auto 8px auto auto;\n    height: 23px;\n    font-size: 18px; }\n\n.loading {\n  color: #2c3e50;\n  margin: 0 0 10px;\n  animation: _fadeInLeft 0.4s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n\n.error {\n  color: #e74c3c;\n  border: 2px solid #e74c3c;\n  background-color: #f7c1bb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  font-size: 14px;\n  padding: 10px;\n  cursor: pointer;\n  display: inline-block;\n  animation: _fadeInLeft 0.4s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .error > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .error > div:last-child {\n      margin: 0 0 0 5px; }\n\n.empty-msg {\n  color: #2c3e50; }\n\n@media screen and (max-width: 470px) {\n  .alert .close {\n    min-width: initial;\n    width: 100%; } }\n\n@media screen and (max-width: 1007px) {\n  #_App {\n    padding: 0 10px; } }\n", ""]);
 
 // exports
 
@@ -31975,7 +31996,8 @@ exports.default = function () {
 
 			var newTask = {
 				id: 1,
-				name: 'TASK'
+				name: 'TASK',
+				edited: false
 			};
 
 			if (last_task_added) newTask.id = last_task_added + 1;
@@ -31983,6 +32005,21 @@ exports.default = function () {
 			tasks = [newTask].concat(_toConsumableArray(state.tasks));
 
 			return _extends({}, state, { tasks: tasks });
+
+		case '_APP:EDIT_TASK':
+			var _action$payload2 = action.payload,
+			    id = _action$payload2.id,
+			    name = _action$payload2.name;
+
+
+			newState = _extends({}, state);
+
+			// edit the task that matches the payload id and update task w/ new name
+			newState.tasks = state.tasks.map(function (task) {
+				return task.id == id ? _extends({}, task, { name: name }) : task;
+			});
+
+			return newState;
 
 		case '_APP:DELETE_TASK':
 			var task_id = action.payload.task_id;

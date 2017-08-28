@@ -11,6 +11,7 @@ import TaskActionButton from './taskActionButton'
 // actions 
 import { 
 	addTask, 
+	editTask,
 	getTasks, 
 	saveTasks,
 	deleteTask,
@@ -26,6 +27,7 @@ class App extends Component{
 		super(props);
 
 		this._addTask = this._addTask.bind(this);
+		this._editTask = this._editTask.bind(this);
 		this._getTasks = this._getTasks.bind(this);
 		this._saveTasks = this._saveTasks.bind(this);
 		this._deleteTask = this._deleteTask.bind(this);
@@ -73,6 +75,11 @@ class App extends Component{
 		if( tasks && tasks.length > 0 ) last_task_added = tasks[0].id;
 
 		dispatch( addTask({ last_task_added }) );
+	}
+
+	_editTask( task ){
+		const { dispatch } = this.props;
+		dispatch( editTask( task ) );
 	}
 
 	_deleteTask({ id }){
@@ -143,7 +150,8 @@ class App extends Component{
 					{ _tasks.map(task => <Task 
 											key={task.id} 
 											{...task} 
-											deleteTask={this._deleteTask} />) }
+											editTask={ this._editTask }
+											deleteTask={ this._deleteTask } />) }
 				</div>
 
 				{ ((_app.saved && disabled) || _app.saving_tasks_err) && 

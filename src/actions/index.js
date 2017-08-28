@@ -3,7 +3,7 @@
 import axios from 'axios'
 
 const routes = {
-  tasks: 'http://cfassignment.herokuapp.com/adam adams/tasks',
+  tasks: 'https://cfassignment.herokuapp.com/adam adams/tasks',
 }
 
 export const addTask = ({ last_task_added }) => ({
@@ -23,20 +23,22 @@ export const getTasks = () => {
 	return (dispatch) => {
 	    dispatch( pendingAction({ pending, type: pending.toUpperCase() }) );
 
-      axios.get(routes.teams)
+      axios.get(routes.tasks)
            .then(res => {
 
               const action = {
                  type: `_APP:${done.toUpperCase()}`,
                  payload: {
                     ...res.data,
+                    [done]: true,
+                    [pending]: false,
                  },
               };
 
               dispatch( action );
 
            })
-           .catch( err => dispatch( errAction({ pending, err }) ) );
+           .catch( err => dispatch( errAction({ pending, err, type: pending.toUpperCase() }) ) );
 	}
 }
 
@@ -52,7 +54,7 @@ export const saveTasks = () => {
         data 
       }) );
 
-      axios.post(routes.teams)
+      axios.post(routes.tasks)
            .then(res => {
 
               const action = {
@@ -78,8 +80,8 @@ const pendingAction = ({ pending, type, data = {} }) => ({
   }
 })
 
-const errAction = ({ pending, err }) => ({
-  type: '_APP:GET_REQUEST_PENDING_ERR',
+const errAction = ({ pending, err, type }) => ({
+  type: `_APP:${type || 'GET_REQUEST_PENDING'}_ERR`,
   payload: {
     [pending]: false,
     [pending+'_err']: err,

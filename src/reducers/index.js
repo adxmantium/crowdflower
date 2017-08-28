@@ -6,15 +6,39 @@ let init = {
 
 export default function(state = init, action) {
 
-    let tasks = null;
+    let tasks = null,
+    	newState = null;
 
     switch(action.type) {
 
 		case '_APP:SAVED_TASKS':
 		case '_APP:SAVING_TASKS':
-		case '_APP:FETCHED_TASKS':
 		case '_APP:FETCHING_TASKS':
 			return {...state, ...action.payload};
+
+		case '_APP:FETCHED_TASKS':
+			const { tasks: tasksList, error, ...rest } = action.payload;
+
+			newState = {...state, ...rest};
+
+			if( tasksList ){
+				// if tasks is an array, set newState.tasks as tasks array
+				// else if object, spread tasks into an array;
+				if( Array.isArray(tasksList) ) newState.tasks = tasksList;
+				else newState.tasks = [...tasksList];
+
+			}else if( error ) newState.error = error;
+
+			newState.error = false;
+
+			return newState;
+
+		case '_APP:FETCHING_TASKS_ERR':
+			return {
+				...state, 
+				error: true,
+				...action.payload,
+			};
 
 		case '_APP:ADD_TASK':
 			const { last_task_added } = action.payload;

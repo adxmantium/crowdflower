@@ -123,6 +123,33 @@ nav{
 	}
 }
 
+.loading{
+	color: $darkBlue;
+	margin: 0 0 10px;
+}
+
+.error{
+	color: $error;
+	border: 2px solid $error;
+	background-color: $lightError;
+	@include bRadius(5px);
+	font-size: 14px;
+	padding: 10px;
+	cursor: pointer;
+	display: inline-block;
+
+	> div{
+		display: inline-block;
+		vertical-align: middle;
+
+		&:last-child{ margin: 0 0 0 5px; }
+	}
+}
+
+.empty-msg{
+	color: $darkBlue;
+}
+
 @media screen and (max-width: 699px){
 	#_App{
 		padding: 0 10px;

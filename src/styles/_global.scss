@@ -5,6 +5,8 @@ $lightGray: #f5f7f9;
 $gray: #8e9fb1;
 $green: #5ac597;
 $lightGreen: #f6fffb;
+$error: #e74c3c;
+$lightError: #f7c1bb;
 
 @mixin bRadius($radius) {
   -webkit-border-radius: $radius;

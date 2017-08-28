@@ -23,6 +23,7 @@ class App extends Component{
 		super(props);
 
 		this._addTask = this._addTask.bind(this);
+		this._getTasks = this._getTasks.bind(this);
 		this._saveTasks = this._saveTasks.bind(this);
 		this._deleteTask = this._deleteTask.bind(this);
 
@@ -35,7 +36,7 @@ class App extends Component{
 		const { dispatch, _app } = this.props;
 
 		// fetch tasks if we don't have any yet
-		if( !_app.tasks ) dispatch( getTasks() );
+		if( !_app.tasks.length ) this._getTasks();
 	}
 
 	componentWillReceiveProps(np){
@@ -44,6 +45,11 @@ class App extends Component{
 
 		// if this states tasks length is not equal to next tasks length, enable save button
 		if( thisTasks.length !== nextTasks.length ) this.state.disabled = false;
+	}
+
+	_getTasks(){
+		const { dispatch } = this.props;
+		dispatch( getTasks() );
 	}
 
 	_addTask(){
@@ -97,7 +103,24 @@ class App extends Component{
 					</div>
 				</div>
 
+				{ _app.fetching_tasks && <div className="loading">Loading tasks...</div> }
+
+				{  _app.error &&
+					<div className="error" onClick={ this._getTasks }>
+						<div>There was an error retrieving your tasks. Click here to try again.</div>
+
+						{ _app.fetching_tasks && 
+							<div>
+								<i className="fa fa-refresh fa-fw fa-spin"></i>
+								<span className="sr-only">Loading...</span>
+							</div> }
+					</div> 
+				}
+
 				<div className="tasks-container">
+					{ (!_app.error && _tasks.length === 0 && !_app.fetching_tasks) && 
+						<div className="empty-msg">You have 0 saved tasks. Click "Add Task" to create a new task</div> }
+
 					{ _tasks.map(task => <Task 
 											key={task.id} 
 											{...task} 

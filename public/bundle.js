@@ -29773,6 +29773,7 @@ var App = function (_Component) {
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
 		_this._addTask = _this._addTask.bind(_this);
+		_this._getTasks = _this._getTasks.bind(_this);
 		_this._saveTasks = _this._saveTasks.bind(_this);
 		_this._deleteTask = _this._deleteTask.bind(_this);
 
@@ -29791,7 +29792,7 @@ var App = function (_Component) {
 
 			// fetch tasks if we don't have any yet
 
-			if (!_app.tasks) dispatch((0, _actions.getTasks)());
+			if (!_app.tasks.length) this._getTasks();
 		}
 	}, {
 		key: 'componentWillReceiveProps',
@@ -29802,6 +29803,13 @@ var App = function (_Component) {
 			// if this states tasks length is not equal to next tasks length, enable save button
 
 			if (thisTasks.length !== nextTasks.length) this.state.disabled = false;
+		}
+	}, {
+		key: '_getTasks',
+		value: function _getTasks() {
+			var dispatch = this.props.dispatch;
+
+			dispatch((0, _actions.getTasks)());
 		}
 	}, {
 		key: '_addTask',
@@ -29873,9 +29881,38 @@ var App = function (_Component) {
 							onClick: this._saveTasks })
 					)
 				),
+				_app.fetching_tasks && _react2.default.createElement(
+					'div',
+					{ className: 'loading' },
+					'Loading tasks...'
+				),
+				_app.error && _react2.default.createElement(
+					'div',
+					{ className: 'error', onClick: this._getTasks },
+					_react2.default.createElement(
+						'div',
+						null,
+						'There was an error retrieving your tasks. Click here to try again.'
+					),
+					_app.fetching_tasks && _react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement('i', { className: 'fa fa-refresh fa-fw fa-spin' }),
+						_react2.default.createElement(
+							'span',
+							{ className: 'sr-only' },
+							'Loading...'
+						)
+					)
+				),
 				_react2.default.createElement(
 					'div',
 					{ className: 'tasks-container' },
+					!_app.error && _tasks.length === 0 && !_app.fetching_tasks && _react2.default.createElement(
+						'div',
+						{ className: 'empty-msg' },
+						'You have 0 saved tasks. Click "Add Task" to create a new task'
+					),
 					_tasks.map(function (task) {
 						return _react2.default.createElement(_task2.default, _extends({
 							key: task.id
@@ -29935,7 +29972,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var routes = {
-  tasks: 'http://cfassignment.herokuapp.com/adam adams/tasks'
+  tasks: 'https://cfassignment.herokuapp.com/adam adams/tasks'
 };
 
 var addTask = exports.addTask = function addTask(_ref) {
@@ -29961,16 +29998,17 @@ var getTasks = exports.getTasks = function getTasks() {
   return function (dispatch) {
     dispatch(pendingAction({ pending: pending, type: pending.toUpperCase() }));
 
-    _axios2.default.get(routes.teams).then(function (res) {
+    _axios2.default.get(routes.tasks).then(function (res) {
+      var _extends2;
 
       var action = {
         type: '_APP:' + done.toUpperCase(),
-        payload: _extends({}, res.data)
+        payload: _extends({}, res.data, (_extends2 = {}, _defineProperty(_extends2, done, true), _defineProperty(_extends2, pending, false), _extends2))
       };
 
       dispatch(action);
     }).catch(function (err) {
-      return dispatch(errAction({ pending: pending, err: err }));
+      return dispatch(errAction({ pending: pending, err: err, type: pending.toUpperCase() }));
     });
   };
 };
@@ -29987,7 +30025,7 @@ var saveTasks = exports.saveTasks = function saveTasks() {
       data: data
     }));
 
-    _axios2.default.post(routes.teams).then(function (res) {
+    _axios2.default.post(routes.tasks).then(function (res) {
 
       var action = {
         type: '_APP:' + done.toUpperCase(),
@@ -30004,7 +30042,7 @@ var saveTasks = exports.saveTasks = function saveTasks() {
 };
 
 var pendingAction = function pendingAction(_ref3) {
-  var _extends2;
+  var _extends3;
 
   var pending = _ref3.pending,
       type = _ref3.type,
@@ -30012,7 +30050,7 @@ var pendingAction = function pendingAction(_ref3) {
       data = _ref3$data === undefined ? {} : _ref3$data;
   return {
     type: '_APP:' + (type || 'GET_REQUEST_PENDING'),
-    payload: _extends({}, data, (_extends2 = {}, _defineProperty(_extends2, pending, true), _defineProperty(_extends2, pending + '_err', false), _extends2))
+    payload: _extends({}, data, (_extends3 = {}, _defineProperty(_extends3, pending, true), _defineProperty(_extends3, pending + '_err', false), _extends3))
   };
 };
 
@@ -30020,9 +30058,10 @@ var errAction = function errAction(_ref4) {
   var _payload;
 
   var pending = _ref4.pending,
-      err = _ref4.err;
+      err = _ref4.err,
+      type = _ref4.type;
   return {
-    type: '_APP:GET_REQUEST_PENDING_ERR',
+    type: '_APP:' + (type || 'GET_REQUEST_PENDING') + '_ERR',
     payload: (_payload = {}, _defineProperty(_payload, pending, false), _defineProperty(_payload, pending + '_err', err), _payload)
   };
 };
@@ -30941,7 +30980,7 @@ exports = module.exports = __webpack_require__(298)(undefined);
 
 
 // module
-exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 1000px;\n  margin: auto;\n  position: relative; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 10px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */\n  outline: none;\n  border: none; }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n    .task-btn.save[disabled] {\n      opacity: 0.3; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0;\n  animation: _fadeInRight 0.4s; }\n\n@keyframes _fadeInRight {\n  0% {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px; }\n  .task-item .name {\n    cursor: text;\n    font-size: 14px;\n    font-weight: 600; }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n.alert {\n  border: 2px solid #5ac597;\n  background-color: #f6fffb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  position: absolute;\n  bottom: 50px;\n  right: 20px;\n  color: #5ac597;\n  padding: 10px 10px 10px 20px;\n  font-size: 13px;\n  font-weight: 600; }\n  .alert > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .alert > div:last-child {\n      margin: 0 0 0 200px;\n      font-size: 18px; }\n\n@media screen and (max-width: 699px) {\n  #_App {\n    padding: 0 10px; } }\n", ""]);
+exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 1000px;\n  margin: auto;\n  position: relative; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 10px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */\n  outline: none;\n  border: none; }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n    .task-btn.save[disabled] {\n      opacity: 0.3; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0;\n  animation: _fadeInRight 0.4s; }\n\n@keyframes _fadeInRight {\n  0% {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px; }\n  .task-item .name {\n    cursor: text;\n    font-size: 14px;\n    font-weight: 600; }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n.alert {\n  border: 2px solid #5ac597;\n  background-color: #f6fffb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  position: absolute;\n  bottom: 50px;\n  right: 20px;\n  color: #5ac597;\n  padding: 10px 10px 10px 20px;\n  font-size: 13px;\n  font-weight: 600; }\n  .alert > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .alert > div:last-child {\n      margin: 0 0 0 200px;\n      font-size: 18px; }\n\n.loading {\n  color: #2c3e50;\n  margin: 0 0 10px; }\n\n.error {\n  color: #e74c3c;\n  border: 2px solid #e74c3c;\n  background-color: #f7c1bb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  font-size: 14px;\n  padding: 10px;\n  cursor: pointer;\n  display: inline-block; }\n  .error > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .error > div:last-child {\n      margin: 0 0 0 5px; }\n\n.empty-msg {\n  color: #2c3e50; }\n\n@media screen and (max-width: 699px) {\n  #_App {\n    padding: 0 10px; } }\n", ""]);
 
 // exports
 
@@ -31775,15 +31814,38 @@ exports.default = function () {
 	var action = arguments[1];
 
 
-	var tasks = null;
+	var tasks = null,
+	    newState = null;
 
 	switch (action.type) {
 
 		case '_APP:SAVED_TASKS':
 		case '_APP:SAVING_TASKS':
-		case '_APP:FETCHED_TASKS':
 		case '_APP:FETCHING_TASKS':
 			return _extends({}, state, action.payload);
+
+		case '_APP:FETCHED_TASKS':
+			var _action$payload = action.payload,
+			    tasksList = _action$payload.tasks,
+			    error = _action$payload.error,
+			    rest = _objectWithoutProperties(_action$payload, ['tasks', 'error']);
+
+			newState = _extends({}, state, rest);
+
+			if (tasksList) {
+				// if tasks is an array, set newState.tasks as tasks array
+				// else if object, spread tasks into an array;
+				if (Array.isArray(tasksList)) newState.tasks = tasksList;else newState.tasks = [].concat(_toConsumableArray(tasksList));
+			} else if (error) newState.error = error;
+
+			newState.error = false;
+
+			return newState;
+
+		case '_APP:FETCHING_TASKS_ERR':
+			return _extends({}, state, {
+				error: true
+			}, action.payload);
 
 		case '_APP:ADD_TASK':
 			var last_task_added = action.payload.last_task_added;
@@ -31818,6 +31880,8 @@ exports.default = function () {
 };
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 // /reducers/index.js
 

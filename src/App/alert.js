@@ -2,6 +2,7 @@
  import React from 'react'
 
 export default ({ msg, close, error }) => (
+
 	<div className={`alert ${error && 'err'}`}>
 
 		<div>{ msg }</div>
@@ -9,4 +10,5 @@ export default ({ msg, close, error }) => (
 		<div className="close" onClick={ close }>&times;</div>
 
 	</div>		
+
 );

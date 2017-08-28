@@ -29979,7 +29979,6 @@ exports.default = function (_ref) {
 	var id = _ref.id,
 	    name = _ref.name,
 	    deleteTask = _ref.deleteTask;
-
 	return _react2.default.createElement(
 		"div",
 		{ className: "task-item", draggable: "true" },

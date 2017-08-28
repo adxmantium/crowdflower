@@ -51,8 +51,9 @@ class App extends Component{
 		const { tasks: nextTasks } = nextAppState;
 
 		// if this states tasks length is not equal to next tasks length, enable save button
-		if( thisTasks.length !== nextTasks.length ){
-			this.state.disabled = false;
+		if( thisTasks.length !== nextTasks.length && 
+			thisAppState.fetched_tasks === nextAppState.fetched_tasks ){
+				this.state.disabled = false;
 
 		}else if( !thisAppState.saved && nextAppState.saved ){
 			this.state.disabled = true;
@@ -84,7 +85,8 @@ class App extends Component{
 	_saveTasks(){
 		const { dispatch, _app: { tasks } } = this.props;
 
-		if( tasks && tasks.length > 0 ) dispatch( saveTasks({ tasks }) );
+		// send entire tasks list in POST request
+		dispatch( saveTasks({ tasks }) );
 	}
 
 	_closeAlert(){
@@ -144,7 +146,7 @@ class App extends Component{
 											deleteTask={this._deleteTask} />) }
 				</div>
 
-				{ (_app.saved || _app.saving_tasks_err) && 
+				{ ((_app.saved && disabled) || _app.saving_tasks_err) && 
 					<Alert
 						error={ !!_app.saving_tasks_err }
 						close={ this._closeAlert }

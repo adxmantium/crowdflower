@@ -77,6 +77,8 @@ export const saveTasks = ({ tasks }) => {
                  type: `_APP:${done.toUpperCase()}`,
                  payload: {
                   saved: true,
+                  err_msg: false,
+                  saving_tasks_err: false,
                  },
               };
 

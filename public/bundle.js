@@ -29810,7 +29810,7 @@ var App = function (_Component) {
 
 			// if this states tasks length is not equal to next tasks length, enable save button
 
-			if (thisTasks.length !== nextTasks.length) {
+			if (thisTasks.length !== nextTasks.length && thisAppState.fetched_tasks === nextAppState.fetched_tasks) {
 				this.state.disabled = false;
 			} else if (!thisAppState.saved && nextAppState.saved) {
 				this.state.disabled = true;
@@ -29854,8 +29854,9 @@ var App = function (_Component) {
 			    dispatch = _props3.dispatch,
 			    tasks = _props3._app.tasks;
 
+			// send entire tasks list in POST request
 
-			if (tasks && tasks.length > 0) dispatch((0, _actions.saveTasks)({ tasks: tasks }));
+			dispatch((0, _actions.saveTasks)({ tasks: tasks }));
 		}
 	}, {
 		key: '_closeAlert',
@@ -29939,7 +29940,7 @@ var App = function (_Component) {
 							deleteTask: _this2._deleteTask }));
 					})
 				),
-				(_app.saved || _app.saving_tasks_err) && _react2.default.createElement(_alert2.default, {
+				(_app.saved && disabled || _app.saving_tasks_err) && _react2.default.createElement(_alert2.default, {
 					error: !!_app.saving_tasks_err,
 					close: this._closeAlert,
 					msg: _app.err_msg || 'Tasks saved successfully.' })
@@ -30137,7 +30138,9 @@ var saveTasks = exports.saveTasks = function saveTasks(_ref3) {
       var action = {
         type: '_APP:' + done.toUpperCase(),
         payload: {
-          saved: true
+          saved: true,
+          err_msg: false,
+          saving_tasks_err: false
         }
       };
 

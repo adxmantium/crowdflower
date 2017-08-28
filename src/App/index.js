@@ -13,6 +13,8 @@ import {
 	getTasks, 
 	saveTasks,
 	deleteTask,
+	closeAlert,
+	resetSaved,
 } from './../actions'
 
 // styles
@@ -26,6 +28,7 @@ class App extends Component{
 		this._getTasks = this._getTasks.bind(this);
 		this._saveTasks = this._saveTasks.bind(this);
 		this._deleteTask = this._deleteTask.bind(this);
+		this._closeAlert = this._closeAlert.bind(this);
 
 		this.state = {
 			disabled: true,
@@ -40,11 +43,19 @@ class App extends Component{
 	}
 
 	componentWillReceiveProps(np){
-		const { _app: { tasks: thisTasks } } = this.props;
-		const { _app: { tasks: nextTasks } } = np;
+		const { _app: thisAppState } = this.props;
+		const { dispatch, _app: nextAppState } = np;
+
+		const { tasks: thisTasks } = thisAppState;
+		const { tasks: nextTasks } = nextAppState;
 
 		// if this states tasks length is not equal to next tasks length, enable save button
-		if( thisTasks.length !== nextTasks.length ) this.state.disabled = false;
+		if( thisTasks.length !== nextTasks.length ){
+			this.state.disabled = false;
+
+		}else if( !thisAppState.saved && nextAppState.saved ){
+			this.state.disabled = true;
+		}
 	}
 
 	_getTasks(){
@@ -73,6 +84,11 @@ class App extends Component{
 		const { dispatch, _app: { tasks } } = this.props;
 
 		if( tasks && tasks.length > 0 ) dispatch( saveTasks({ tasks }) );
+	}
+
+	_closeAlert(){
+		const { dispatch } = this.props;
+		dispatch( closeAlert() );
 	}
 
 	render(){
@@ -130,7 +146,14 @@ class App extends Component{
 				{ _app.saved && 
 					<div className="alert">
 						<div>Tasks saved successfully.</div>
-						<div>&times;</div>
+						<div className="close" onClick={ this._closeAlert }>&times;</div>
+					</div> 
+				}
+
+				{ _app.saving_tasks_err && 
+					<div className="alert err">
+						<div>{ _app.err_msg }</div>
+						<div className="close" onClick={ this._closeAlert }>&times;</div>
 					</div> 
 				}
 

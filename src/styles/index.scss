@@ -47,7 +47,7 @@ nav{
 	font-weight: 600;
 	font-size: 14px;
 	padding: 10px 15px;
-	@include bRadius(5px);
+	@include bRadius($radius);
 	cursor: pointer;
 	@include noUserSelect();
 	outline: none;
@@ -66,13 +66,13 @@ nav{
 
 .task-item{
 	background-color: #fff;
-	@include bRadius(5px);
+	@include bRadius($radius);
 	padding: 15px 35px;
 	box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);
 	min-height: 186px;
 	position: relative;
 	margin: 0 0 12px 0;
-	@include fadeInLeft(0.4s);
+	@include fadeInLeft($fadeSec);
 
 	> div{ color: $gray; }
 
@@ -103,7 +103,7 @@ nav{
 .alert{
 	border: 2px solid $green;
 	background-color: $lightGreen;
-	@include bRadius(5px);
+	@include bRadius($radius);
 	position: absolute;
 	bottom: 50px;
 	right: 20px;
@@ -111,47 +111,64 @@ nav{
 	padding: 10px 10px 10px 20px;
 	font-size: 13px;
 	font-weight: 600;
+	min-width: 400px;
+
+	&.err{
+		color: $error;
+		border: 2px solid $error;
+		background-color: $lightError;
+	}
 
 	> div{
 		display: inline-block;
 		vertical-align: middle;
 
-		&:last-child{ 
-			margin: 0 0 0 200px; 
-			font-size: 18px;
-		}
+	}
+
+	.close{ 
+		cursor: pointer; 
+		position: absolute;
+		top: 0; right: 0; bottom: 0;
+		margin: auto 8px auto auto;
+		height: 23px;
+		font-size: 18px;
 	}
 }
 
 .loading{
 	color: $darkBlue;
 	margin: 0 0 10px;
+	@include fadeInRight($fadeSec);
 }
 
 .error{
 	color: $error;
 	border: 2px solid $error;
 	background-color: $lightError;
-	@include bRadius(5px);
+	@include bRadius($radius);
 	font-size: 14px;
 	padding: 10px;
 	cursor: pointer;
 	display: inline-block;
+	@include fadeInRight($fadeSec);
 
 	> div{
 		display: inline-block;
-		vertical-align: middle;
+		vertical-align: middle;	
 
 		&:last-child{ margin: 0 0 0 5px; }
 	}
 }
 
-.empty-msg{
-	color: $darkBlue;
+.empty-msg{ color: $darkBlue; }
+
+@media screen and (max-width: 470px){
+	.alert .close{
+		min-width: initial;
+		width: 100%;
+	}
 }
 
-@media screen and (max-width: 699px){
-	#_App{
-		padding: 0 10px;
-	}	
+@media screen and (max-width: 1007px){
+	#_App{ padding: 0 10px; }	
 }

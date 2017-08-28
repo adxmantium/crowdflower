@@ -6,6 +6,19 @@ const routes = {
   tasks: 'https://cfassignment.herokuapp.com/adam adams/tasks',
 }
 
+export const closeAlert = () => ({
+  type: '_APP:CLOSE_ALERT',
+  payload: {
+    saved: false,
+    saving_tasks_err: false,
+  }
+});
+
+export const resetSaved = () => ({
+  type: '_APP:RESET_SAVED',
+  payload: {saved: false},
+});
+
 export const addTask = ({ last_task_added }) => ({
   type: '_APP:ADD_TASK',
   payload: { last_task_added }
@@ -42,7 +55,7 @@ export const getTasks = () => {
 	}
 }
 
-export const saveTasks = () => {
+export const saveTasks = ({ tasks }) => {
   const pending = 'saving_tasks',
         done = 'saved_tasks',
         data = {saved: false};
@@ -54,7 +67,7 @@ export const saveTasks = () => {
         data 
       }) );
 
-      axios.post(routes.tasks)
+      axios.post(routes.tasks, { tasks })
            .then(res => {
 
               const action = {
@@ -67,7 +80,14 @@ export const saveTasks = () => {
               dispatch( action );
 
            })
-           .catch( err => dispatch( errAction({ pending, err }) ) );
+           .catch( err => {
+              dispatch( errAction({ 
+                pending, 
+                err, 
+                type: pending.toUpperCase(),
+                err_msg: err.response.data && err.response.data.error,
+              }) )
+           } );
   }
 }
 
@@ -80,10 +100,11 @@ const pendingAction = ({ pending, type, data = {} }) => ({
   }
 })
 
-const errAction = ({ pending, err, type }) => ({
+const errAction = ({ pending, err, type, err_msg }) => ({
   type: `_APP:${type || 'GET_REQUEST_PENDING'}_ERR`,
   payload: {
     [pending]: false,
     [pending+'_err']: err,
+    err_msg,
   }
 })

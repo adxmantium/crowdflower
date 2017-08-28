@@ -11,6 +11,8 @@ export default function(state = init, action) {
 
     switch(action.type) {
 
+    	case '_APP:RESET_SAVED':
+    	case '_APP:CLOSE_ALERT':
 		case '_APP:SAVED_TASKS':
 		case '_APP:SAVING_TASKS':
 		case '_APP:FETCHING_TASKS':
@@ -32,6 +34,13 @@ export default function(state = init, action) {
 			newState.error = false;
 
 			return newState;
+
+		case '_APP:SAVING_TASKS_ERR':
+			return {
+				...state,
+				saving_error: true,
+				...action.payload,
+			}
 
 		case '_APP:FETCHING_TASKS_ERR':
 			return {

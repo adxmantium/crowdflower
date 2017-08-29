@@ -1,4 +1,4 @@
-# Crowdflower Challenge
+# CrowdFlower Challenge
 
 ### Ways to view project
 

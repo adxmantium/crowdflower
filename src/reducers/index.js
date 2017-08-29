@@ -15,9 +15,16 @@ export default function(state = init, action) {
     	case '_APP:CLOSE_ALERT':
 		case '_APP:SAVED_TASKS':
 		case '_APP:SAVING_TASKS':
-		case '_APP:REORDER_TASKS':
 		case '_APP:FETCHING_TASKS':
 			return {...state, ...action.payload};
+
+		case '_APP:REORDER_TASKS':
+			tasks = action.payload.tasks;
+
+			const tasksOrder = tasks.map(task => task.id)
+									.reduce((order, id) => order += id, '');
+
+			return {...state, ...action.payload, tasksOrder};
 
 		case '_APP:FETCHED_TASKS':
 			const { tasks: tasksList, error, ...rest } = action.payload;
@@ -82,6 +89,10 @@ export default function(state = init, action) {
 			
 			// edit the task that matches the payload id and update task w/ new name
 			newState.tasks = state.tasks.map(task => task.id == id ? {...task, edited: true, name} : task);
+
+			// taskNamesKey is a string of the all task names concatenated together - used to determine difference in edited task names
+			newState.taskNamesKey = newState.tasks.map(task => task.name)
+												  .reduce((names, name) => names += name, '');
 
 			return newState;
 

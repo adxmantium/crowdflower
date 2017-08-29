@@ -29814,13 +29814,16 @@ var App = function (_Component) {
 			var thisTasks = thisAppState.tasks;
 			var nextTasks = nextAppState.tasks;
 
-			// if this states tasks length is not equal to next tasks length, enable save button
 
 			if (thisTasks.length !== nextTasks.length && thisAppState.fetched_tasks === nextAppState.fetched_tasks) {
+				// if this states tasks length is not equal to next tasks length, enable save button
 				this.state.disabled = false;
-			} else if (thisAppState.tasksOrder !== nextAppState.tasksOrder) {
+			} else if (thisAppState.tasksOrder !== nextAppState.tasksOrder || thisAppState.taskNamesKey !== nextAppState.taskNamesKey) {
+				// also, if tasksOrder is different between states, enable save button
+				// OR if taskNamesKey (a string of all task names combined) are different between states, enable save button
 				this.state.disabled = false;
 			} else if (!thisAppState.saved && nextAppState.saved) {
+				// if this state has not saved, but the next state, saved is true, disable save button
 				this.state.disabled = true;
 			}
 		}
@@ -29888,13 +29891,7 @@ var App = function (_Component) {
 
 			var tasks = (0, _reactSortableHoc.arrayMove)([].concat(_toConsumableArray(_app.tasks)), oldIndex, newIndex);
 
-			var tasksOrder = tasks.map(function (task) {
-				return task.id;
-			}).reduce(function (order, id) {
-				return order += id;
-			}, '');
-
-			dispatch((0, _actions.reorderTasks)({ tasks: tasks, tasksOrder: tasksOrder }));
+			dispatch((0, _actions.reorderTasks)({ tasks: tasks }));
 		}
 	}, {
 		key: 'render',
@@ -32052,9 +32049,19 @@ exports.default = function () {
 		case '_APP:CLOSE_ALERT':
 		case '_APP:SAVED_TASKS':
 		case '_APP:SAVING_TASKS':
-		case '_APP:REORDER_TASKS':
 		case '_APP:FETCHING_TASKS':
 			return _extends({}, state, action.payload);
+
+		case '_APP:REORDER_TASKS':
+			tasks = action.payload.tasks;
+
+			var tasksOrder = tasks.map(function (task) {
+				return task.id;
+			}).reduce(function (order, id) {
+				return order += id;
+			}, '');
+
+			return _extends({}, state, action.payload, { tasksOrder: tasksOrder });
 
 		case '_APP:FETCHED_TASKS':
 			var _action$payload = action.payload,
@@ -32122,6 +32129,13 @@ exports.default = function () {
 			newState.tasks = state.tasks.map(function (task) {
 				return task.id == id ? _extends({}, task, { edited: true, name: name }) : task;
 			});
+
+			// taskNamesKey is a string of the all task names concatenated together - used to determine difference in edited task names
+			newState.taskNamesKey = newState.tasks.map(function (task) {
+				return task.name;
+			}).reduce(function (names, name) {
+				return names += name;
+			}, '');
 
 			return newState;
 

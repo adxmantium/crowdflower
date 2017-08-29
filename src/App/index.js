@@ -60,14 +60,17 @@ class App extends Component{
 		const { tasks: thisTasks } = thisAppState;
 		const { tasks: nextTasks } = nextAppState;
 
-		// if this states tasks length is not equal to next tasks length, enable save button
 		if( thisTasks.length !== nextTasks.length && thisAppState.fetched_tasks === nextAppState.fetched_tasks ){
+			// if this states tasks length is not equal to next tasks length, enable save button
 			this.state.disabled = false;
 
-		}else if( thisAppState.tasksOrder !== nextAppState.tasksOrder ){
+		}else if( (thisAppState.tasksOrder !== nextAppState.tasksOrder) || (thisAppState.taskNamesKey !== nextAppState.taskNamesKey) ){
+			// also, if tasksOrder is different between states, enable save button
+			// OR if taskNamesKey (a string of all task names combined) are different between states, enable save button
 			this.state.disabled = false;
 
 		}else if( !thisAppState.saved && nextAppState.saved ){
+			// if this state has not saved, but the next state, saved is true, disable save button
 			this.state.disabled = true;
 		}
 	}
@@ -112,12 +115,9 @@ class App extends Component{
 	_onSortEnd({ oldIndex, newIndex }){
 		const { dispatch, _app } = this.props;
 
-		const tasks = arrayMove([..._app.tasks], oldIndex, newIndex);
+		const tasks = arrayMove([..._app.tasks], oldIndex, newIndex);	
 
-		const tasksOrder = tasks.map(task => task.id)
-								.reduce((order, id) => order += id, '');
-
-		dispatch( reorderTasks({ tasks, tasksOrder }) );
+		dispatch( reorderTasks({ tasks }) );
 	}
 
 	render(){
@@ -180,4 +180,4 @@ const mapStateToProps = (state, props) => {
   };
 } 
 
-export default connect(mapStateToProps)(App)	;
+export default connect(mapStateToProps)(App);

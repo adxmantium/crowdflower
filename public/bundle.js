@@ -29739,6 +29739,10 @@ var _alert = __webpack_require__(277);
 
 var _alert2 = _interopRequireDefault(_alert);
 
+var _errorMessage = __webpack_require__(460);
+
+var _errorMessage2 = _interopRequireDefault(_errorMessage);
+
 var _taskActionButton = __webpack_require__(278);
 
 var _taskActionButton2 = _interopRequireDefault(_taskActionButton);
@@ -29931,41 +29935,19 @@ var App = function (_Component) {
 					{ className: 'loading' },
 					'Loading tasks...'
 				),
-				_app.error && _react2.default.createElement(
-					'div',
-					{ className: 'error', onClick: this._getTasks },
-					_react2.default.createElement(
-						'div',
-						null,
-						'There was an error retrieving your tasks. Click here to try again.'
-					),
-					_app.fetching_tasks && _react2.default.createElement(
-						'div',
-						null,
-						_react2.default.createElement('i', { className: 'fa fa-refresh fa-fw fa-spin' }),
-						_react2.default.createElement(
-							'span',
-							{ className: 'sr-only' },
-							'Loading...'
-						)
-					)
-				),
-				_react2.default.createElement(
-					'div',
-					{ className: 'tasks-container' },
-					!_app.error && _tasks.length === 0 && !_app.fetching_tasks && _react2.default.createElement(
-						'div',
-						{ className: 'empty-msg' },
-						'You have 0 saved tasks. Click "Add Task" to create a new task'
-					),
-					_react2.default.createElement(_sortableComponents.SortableList, {
-						useDragHandle: true,
-						tasks: _tasks,
-						editTask: this._editTask,
-						deleteTask: this._deleteTask,
-						onSortEnd: this._onSortEnd })
-				),
-				(_app.saved && disabled || _app.saving_tasks_err) && _react2.default.createElement(_alert2.default, {
+				_react2.default.createElement(_errorMessage2.default, {
+					show: !!_app.error,
+					isFetching: _app.fetching_tasks,
+					onClick: this._getTasks }),
+				_react2.default.createElement(_sortableComponents.SortableList, {
+					useDragHandle: true,
+					tasks: _tasks,
+					isEmptyList: !_app.error && _tasks.length === 0 && !_app.fetching_tasks,
+					editTask: this._editTask,
+					deleteTask: this._deleteTask,
+					onSortEnd: this._onSortEnd }),
+				_react2.default.createElement(_alert2.default, {
+					show: !!(_app.saved && disabled || _app.saving_tasks_err),
 					error: !!_app.saving_tasks_err,
 					close: this._closeAlert,
 					msg: _app.err_msg || 'Tasks saved successfully.' })
@@ -30093,12 +30075,15 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = function (_ref) {
-	var msg = _ref.msg,
+	var show = _ref.show,
+	    msg = _ref.msg,
 	    close = _ref.close,
 	    error = _ref.error;
-	return _react2.default.createElement(
+
+
+	return show && _react2.default.createElement(
 		'div',
-		{ className: 'alert ' + (error && 'err') },
+		{ className: 'alert' + (error ? ' err' : '') },
 		_react2.default.createElement(
 			'div',
 			null,
@@ -30110,7 +30095,7 @@ exports.default = function (_ref) {
 			'\xD7'
 		)
 	);
-}; // /src/App/task.js
+}; // /src/App/alert.js
 
 /***/ }),
 /* 278 */
@@ -31220,7 +31205,7 @@ exports = module.exports = __webpack_require__(301)(undefined);
 
 
 // module
-exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 700px;\n  margin: auto;\n  position: relative; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 10px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */\n  outline: none;\n  border: none; }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n    .task-btn.save[disabled] {\n      opacity: 0.3; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 60px 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0; }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px;\n    transform: rotate(90deg); }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n.edit-field {\n  border: none;\n  outline-width: 2px;\n  font-size: 16px;\n  width: 100%;\n  color: #2c3e50;\n  font-weight: 600; }\n  .edit-field:focus {\n    outline-color: #5ac597;\n    padding: 5px 0 5px 10px; }\n\n.alert {\n  border: 2px solid #5ac597;\n  background-color: #f6fffb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  position: absolute;\n  bottom: 50px;\n  right: -100px;\n  color: #5ac597;\n  padding: 10px 10px 10px 20px;\n  font-size: 13px;\n  font-weight: 600;\n  min-width: 400px; }\n  .alert.err {\n    color: #e74c3c;\n    border: 2px solid #e74c3c;\n    background-color: #f7c1bb; }\n  .alert > div {\n    display: inline-block;\n    vertical-align: middle; }\n  .alert .close {\n    cursor: pointer;\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    margin: auto 8px auto auto;\n    height: 23px;\n    font-size: 18px; }\n\n.loading {\n  color: #2c3e50;\n  margin: 0 0 10px;\n  animation: _fadeInLeft 0.2s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n\n.error {\n  color: #e74c3c;\n  border: 2px solid #e74c3c;\n  background-color: #f7c1bb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  font-size: 14px;\n  padding: 10px;\n  cursor: pointer;\n  display: inline-block;\n  animation: _fadeInLeft 0.2s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .error > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .error > div:last-child {\n      margin: 0 0 0 5px; }\n\n.empty-msg {\n  color: #2c3e50; }\n\n@media screen and (max-width: 470px) {\n  .alert .close {\n    min-width: initial;\n    width: 100%; } }\n\n@media screen and (max-width: 1007px) {\n  #_App {\n    padding: 0 10px; }\n  .alert {\n    right: 20px; } }\n", ""]);
+exports.push([module.i, ".stylish-scrollbar-mini::-webkit-scrollbar {\n  width: 5px; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar::-webkit-scrollbar-button {\n  background-color: #eee;\n  height: 0; }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-track {\n  background-color: rgba(0, 0, 0, 0.2); }\n\n.stylish-scrollbar-mini::-webkit-scrollbar-thumb {\n  background-color: rgba(0, 0, 0, 0.6); }\n\nbody {\n  margin: 0;\n  padding: 0;\n  width: 100vw;\n  height: 100vh;\n  font-family: helvetica;\n  background-color: #f5f7f9; }\n\n#_App {\n  max-width: 700px;\n  margin: auto;\n  position: relative; }\n\nnav {\n  background-color: #2c3e50;\n  height: 57px; }\n\n.header {\n  padding: 20px 0; }\n  .header > div {\n    display: inline-block;\n    vertical-align: middle;\n    width: 50%; }\n    .header > div:last-child {\n      text-align: right; }\n\n.title {\n  font-weight: 600;\n  font-size: 30px;\n  color: #2c3e50; }\n\n.task-btn {\n  display: inline-block;\n  vertical-align: middle;\n  color: #fff;\n  font-weight: 600;\n  font-size: 14px;\n  padding: 10px 15px;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  cursor: pointer;\n  -webkit-user-select: none;\n  /* Chrome all / Safari all */\n  -moz-user-select: none;\n  /* Firefox all */\n  -ms-user-select: none;\n  /* IE 10+ */\n  user-select: none;\n  /* Likely future */\n  outline: none;\n  border: none; }\n  .task-btn.add {\n    background-color: #8e9fb1; }\n  .task-btn.save {\n    background-color: #5ac597; }\n    .task-btn.save[disabled] {\n      opacity: 0.3; }\n  .task-btn:last-child {\n    margin: 0 0 0 10px; }\n  .task-btn:active {\n    box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.4); }\n\n.task-item {\n  background-color: #fff;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  padding: 15px 60px 15px 35px;\n  box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.2);\n  min-height: 186px;\n  position: relative;\n  margin: 0 0 12px 0; }\n  .task-item > div {\n    color: #8e9fb1; }\n  .task-item .reorder, .task-item .trash {\n    position: absolute;\n    top: 15px;\n    font-size: 12px; }\n  .task-item .reorder {\n    cursor: move;\n    left: 10px;\n    transform: rotate(90deg); }\n  .task-item .trash {\n    cursor: pointer;\n    right: 20px;\n    font-size: 20px; }\n\n.edit-field {\n  border: none;\n  outline-width: 2px;\n  font-size: 16px;\n  width: 100%;\n  color: #2c3e50;\n  font-weight: 600; }\n  .edit-field:focus {\n    outline-color: #5ac597;\n    padding: 5px 0 5px 10px; }\n\n.alert {\n  border: 1px solid #5ac597;\n  background-color: #f6fffb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  position: fixed;\n  bottom: 250px;\n  right: 100px;\n  color: #5ac597;\n  padding: 10px 10px 10px 20px;\n  font-size: 13px;\n  font-weight: 600;\n  min-width: 400px;\n  animation: _fadeInRight 0.2s; }\n\n@keyframes _fadeInRight {\n  0% {\n    opacity: 0;\n    transform: translate3d(100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .alert.err {\n    color: #e74c3c;\n    border: 2px solid #e74c3c;\n    background-color: #f7c1bb; }\n  .alert > div {\n    display: inline-block;\n    vertical-align: middle; }\n  .alert .close {\n    cursor: pointer;\n    position: absolute;\n    top: 0;\n    right: 0;\n    bottom: 0;\n    margin: auto 8px auto auto;\n    height: 23px;\n    font-size: 18px; }\n\n.loading {\n  color: #2c3e50;\n  margin: 0 0 10px;\n  animation: _fadeInLeft 0.2s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n\n.error {\n  color: #e74c3c;\n  border: 2px solid #e74c3c;\n  background-color: #f7c1bb;\n  -webkit-border-radius: 5px;\n  -moz-border-radius: 5px;\n  -ms-border-radius: 5px;\n  border-radius: 5px;\n  font-size: 14px;\n  padding: 10px;\n  cursor: pointer;\n  display: inline-block;\n  animation: _fadeInLeft 0.2s; }\n\n@keyframes _fadeInLeft {\n  0% {\n    opacity: 0;\n    transform: translate3d(-100%, 0, 0); }\n  100% {\n    opacity: 1;\n    transform: none; } }\n  .error > div {\n    display: inline-block;\n    vertical-align: middle; }\n    .error > div:last-child {\n      margin: 0 0 0 5px; }\n\n.empty-msg {\n  color: #2c3e50; }\n\n@media screen and (max-width: 357px) {\n  .task-btn.add {\n    margin: 0 0 10px; } }\n\n@media screen and (max-width: 470px) {\n  .alert {\n    min-width: initial;\n    max-width: 150px; } }\n\n@media screen and (max-width: 720px) {\n  #_App {\n    padding: 0 10px; } }\n\n@media screen and (max-width: 1007px) {\n  .alert {\n    right: 20px; } }\n", ""]);
 
 // exports
 
@@ -38194,11 +38179,17 @@ var SortableItem = (0, _reactSortableHoc.SortableElement)(function (_ref) {
 exports.SortableItem = SortableItem;
 var SortableList = (0, _reactSortableHoc.SortableContainer)(function (_ref2) {
 	var tasks = _ref2.tasks,
-	    actions = _objectWithoutProperties(_ref2, ['tasks']);
+	    isEmptyList = _ref2.isEmptyList,
+	    actions = _objectWithoutProperties(_ref2, ['tasks', 'isEmptyList']);
 
 	return _react2.default.createElement(
 		'div',
-		null,
+		{ className: 'tasks-container' },
+		isEmptyList && _react2.default.createElement(
+			'div',
+			{ className: 'empty-msg' },
+			'You have 0 saved tasks. Click "Add Task" to create a new task'
+		),
 		tasks.map(function (task, index) {
 			return _react2.default.createElement(SortableItem, _extends({
 				key: task.id || 'item-' + index,
@@ -38208,6 +38199,50 @@ var SortableList = (0, _reactSortableHoc.SortableContainer)(function (_ref2) {
 	);
 });
 exports.SortableList = SortableList;
+
+/***/ }),
+/* 460 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (_ref) {
+	var show = _ref.show,
+	    isFetching = _ref.isFetching,
+	    onClick = _ref.onClick;
+
+
+	return show && _react2.default.createElement(
+		"div",
+		{ className: "error", onClick: onClick },
+		_react2.default.createElement(
+			"div",
+			null,
+			"There was an error retrieving your tasks. Click here to try again."
+		),
+		isFetching && _react2.default.createElement(
+			"div",
+			null,
+			_react2.default.createElement("i", { className: "fa fa-refresh fa-fw fa-spin" }),
+			_react2.default.createElement(
+				"span",
+				{ className: "sr-only" },
+				"Loading..."
+			)
+		)
+	);
+}; // /src/App/errorMessage.js
 
 /***/ })
 /******/ ]);

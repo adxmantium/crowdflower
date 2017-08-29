@@ -109,17 +109,18 @@ nav{
 }
 
 .alert{
-	border: 2px solid $green;
+	border: 1px solid $green;
 	background-color: $lightGreen;
 	@include bRadius($radius);
-	position: absolute;
-	bottom: 50px;
-	right: -100px;
+	position: fixed;
+	bottom: 250px;
+	right: 100px;
 	color: $green;
 	padding: 10px 10px 10px 20px;
 	font-size: 13px;
 	font-weight: 600;
 	min-width: 400px;
+	@include fadeInLeft($fadeSec);
 
 	&.err{
 		color: $error;
@@ -170,15 +171,23 @@ nav{
 
 .empty-msg{ color: $darkBlue; }
 
-@media screen and (max-width: 470px){
-	.alert .close{
-		min-width: initial;
-		width: 100%;
+@media screen and (max-width: 357px){
+	.task-btn.add{
+		margin: 0 0 10px;
 	}
 }
 
-@media screen and (max-width: 1007px){
-	#_App{ padding: 0 10px; }	
+@media screen and (max-width: 470px){
+	.alert{
+		min-width: initial;
+		max-width: 150px;
+	}
+}
 
+@media screen and (max-width: 720px){
+	#_App{ padding: 0 10px; }	
+}
+
+@media screen and (max-width: 1007px){
 	.alert{ right: 20px; }
 }

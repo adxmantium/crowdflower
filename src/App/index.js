@@ -6,6 +6,7 @@ import { arrayMove } from 'react-sortable-hoc'
 
 // components
 import Alert from './alert'
+import ErrorMessage from './errorMessage'
 import TaskActionButton from './taskActionButton'
 import {
 	DragHandle,
@@ -149,36 +150,24 @@ class App extends Component{
 
 				{ _app.fetching_tasks && <div className="loading">Loading tasks...</div> }
 
-				{  _app.error &&
-					<div className="error" onClick={ this._getTasks }>
-						<div>There was an error retrieving your tasks. Click here to try again.</div>
+				<ErrorMessage
+					show={ !!_app.error }
+					isFetching={ _app.fetching_tasks }
+					onClick={ this._getTasks } />
+						
+				<SortableList 
+					useDragHandle={true}
+					tasks={ _tasks } 
+					isEmptyList={ !_app.error && _tasks.length === 0 && !_app.fetching_tasks }
+					editTask={ this._editTask }
+					deleteTask={ this._deleteTask }
+					onSortEnd={ this._onSortEnd } />
 
-						{ _app.fetching_tasks && 
-							<div>
-								<i className="fa fa-refresh fa-fw fa-spin"></i>
-								<span className="sr-only">Loading...</span>
-							</div> }
-					</div> 
-				}
-
-				<div className="tasks-container">
-					{ (!_app.error && _tasks.length === 0 && !_app.fetching_tasks) && 
-						<div className="empty-msg">You have 0 saved tasks. Click "Add Task" to create a new task</div> }
-
-					<SortableList 
-						useDragHandle={true}
-						tasks={ _tasks } 
-						editTask={ this._editTask }
-						deleteTask={ this._deleteTask }
-						onSortEnd={ this._onSortEnd } />
-
-				</div>
-
-				{ ((_app.saved && disabled) || _app.saving_tasks_err) && 
-					<Alert
-						error={ !!_app.saving_tasks_err }
-						close={ this._closeAlert }
-						msg={ _app.err_msg || 'Tasks saved successfully.' } /> }
+				<Alert
+					show={ !!((_app.saved && disabled) || _app.saving_tasks_err) }
+					error={ !!_app.saving_tasks_err }
+					close={ this._closeAlert }
+					msg={ _app.err_msg || 'Tasks saved successfully.' } />
 
 			</div>
 		);

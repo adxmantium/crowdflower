@@ -1,14 +1,19 @@
-// /src/App/task.js
- import React from 'react'
+// /src/App/alert.js
 
-export default ({ msg, close, error }) => (
+import React from 'react'
 
-	<div className={`alert ${error && 'err'}`}>
+export default ({ show, msg, close, error }) => {
 
-		<div>{ msg }</div>
+	return show && (
 
-		<div className="close" onClick={ close }>&times;</div>
+		<div className={`alert${error ? ' err' : ''}`}>
 
-	</div>		
+			<div>{ msg }</div>
 
-);
+			<div className="close" onClick={ close }>&times;</div>
+
+		</div>		
+
+	);
+
+}

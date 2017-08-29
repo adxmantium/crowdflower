@@ -29,11 +29,15 @@ export const SortableItem = SortableElement(({ editTask, deleteTask, ...task }) 
 );
 
 // task items container
-export const SortableList = SortableContainer(({ tasks, ...actions }) => {
+export const SortableList = SortableContainer(({ tasks, isEmptyList, ...actions }) => {
 
   	return (
 
-  		<div>
+  		<div className="tasks-container">
+  		
+  			{ isEmptyList && 
+  				<div className="empty-msg">You have 0 saved tasks. Click "Add Task" to create a new task</div> }
+
 			{ tasks.map((task, index) => <SortableItem 
 											key={task.id || `item-${index}`} 
 											index={index} 

@@ -29727,8 +29727,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _reactRedux = __webpack_require__(100);
 
 var _react = __webpack_require__(6);
@@ -29737,10 +29735,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactSortableHoc = __webpack_require__(350);
 
-var _task = __webpack_require__(276);
-
-var _task2 = _interopRequireDefault(_task);
-
 var _alert = __webpack_require__(277);
 
 var _alert2 = _interopRequireDefault(_alert);
@@ -29748,6 +29742,8 @@ var _alert2 = _interopRequireDefault(_alert);
 var _taskActionButton = __webpack_require__(278);
 
 var _taskActionButton2 = _interopRequireDefault(_taskActionButton);
+
+var _sortableComponents = __webpack_require__(459);
 
 var _actions = __webpack_require__(279);
 
@@ -29761,9 +29757,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } // /src/Team/index.js
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // /src/Team/index.js
 
 // components
 
@@ -29773,44 +29767,6 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
 
 // styles
 
-
-// drag handle component that allows user to reorder list by click-dragging item
-var DragHandle = (0, _reactSortableHoc.SortableHandle)(function () {
-	return _react2.default.createElement(
-		'div',
-		{ className: 'reorder' },
-		_react2.default.createElement('i', { className: 'fa fa-th' })
-	);
-});
-
-// individual task item
-var SortableItem = (0, _reactSortableHoc.SortableElement)(function (_ref) {
-	var editTask = _ref.editTask,
-	    deleteTask = _ref.deleteTask,
-	    task = _objectWithoutProperties(_ref, ['editTask', 'deleteTask']);
-
-	return _react2.default.createElement(_task2.default, _extends({}, task, {
-		editTask: editTask,
-		deleteTask: deleteTask,
-		DragHandleComponent: DragHandle }));
-});
-
-// task items container
-var SortableList = (0, _reactSortableHoc.SortableContainer)(function (_ref2) {
-	var tasks = _ref2.tasks,
-	    actions = _objectWithoutProperties(_ref2, ['tasks']);
-
-	return _react2.default.createElement(
-		'div',
-		null,
-		tasks.map(function (task, index) {
-			return _react2.default.createElement(SortableItem, _extends({
-				key: task.id || 'item-' + index,
-				index: index
-			}, task, actions));
-		})
-	);
-});
 
 var App = function (_Component) {
 	_inherits(App, _Component);
@@ -29890,8 +29846,8 @@ var App = function (_Component) {
 		}
 	}, {
 		key: '_deleteTask',
-		value: function _deleteTask(_ref3) {
-			var id = _ref3.id;
+		value: function _deleteTask(_ref) {
+			var id = _ref.id;
 			var dispatch = this.props.dispatch;
 
 			// pass id of the task to be deleted
@@ -29918,9 +29874,9 @@ var App = function (_Component) {
 		}
 	}, {
 		key: '_onSortEnd',
-		value: function _onSortEnd(_ref4) {
-			var oldIndex = _ref4.oldIndex,
-			    newIndex = _ref4.newIndex;
+		value: function _onSortEnd(_ref2) {
+			var oldIndex = _ref2.oldIndex,
+			    newIndex = _ref2.newIndex;
 			var _props3 = this.props,
 			    dispatch = _props3.dispatch,
 			    _app = _props3._app;
@@ -30002,7 +29958,7 @@ var App = function (_Component) {
 						{ className: 'empty-msg' },
 						'You have 0 saved tasks. Click "Add Task" to create a new task'
 					),
-					_react2.default.createElement(SortableList, {
+					_react2.default.createElement(_sortableComponents.SortableList, {
 						useDragHandle: true,
 						tasks: _tasks,
 						editTask: this._editTask,
@@ -38184,6 +38140,74 @@ function sortableHandle(WrappedComponent) {
     return _class;
   }(_react.Component), _class.displayName = (0, _utils.provideDisplayName)('sortableHandle', WrappedComponent), _temp;
 }
+
+/***/ }),
+/* 459 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.SortableList = exports.SortableItem = exports.DragHandle = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _task = __webpack_require__(276);
+
+var _task2 = _interopRequireDefault(_task);
+
+var _reactSortableHoc = __webpack_require__(350);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } // /src/App/sortableComponents.js
+
+// drag handle component that allows user to reorder list by click-dragging item
+var DragHandle = exports.DragHandle = (0, _reactSortableHoc.SortableHandle)(function () {
+	return _react2.default.createElement(
+		'div',
+		{ className: 'reorder' },
+		_react2.default.createElement('i', { className: 'fa fa-th' })
+	);
+});
+
+// individual task item
+var SortableItem = (0, _reactSortableHoc.SortableElement)(function (_ref) {
+	var editTask = _ref.editTask,
+	    deleteTask = _ref.deleteTask,
+	    task = _objectWithoutProperties(_ref, ['editTask', 'deleteTask']);
+
+	return _react2.default.createElement(_task2.default, _extends({}, task, {
+		editTask: editTask,
+		deleteTask: deleteTask,
+		DragHandleComponent: DragHandle }));
+});
+
+// task items container
+exports.SortableItem = SortableItem;
+var SortableList = (0, _reactSortableHoc.SortableContainer)(function (_ref2) {
+	var tasks = _ref2.tasks,
+	    actions = _objectWithoutProperties(_ref2, ['tasks']);
+
+	return _react2.default.createElement(
+		'div',
+		null,
+		tasks.map(function (task, index) {
+			return _react2.default.createElement(SortableItem, _extends({
+				key: task.id || 'item-' + index,
+				index: index
+			}, task, actions));
+		})
+	);
+});
+exports.SortableList = SortableList;
 
 /***/ })
 /******/ ]);

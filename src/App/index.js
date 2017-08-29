@@ -2,17 +2,16 @@
 
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
-import { 
-	arrayMove,
-	SortableHandle,
-	SortableElement, 
-	SortableContainer, 
-} from 'react-sortable-hoc'
+import { arrayMove } from 'react-sortable-hoc'
 
 // components
-import Task from './task'
 import Alert from './alert'
 import TaskActionButton from './taskActionButton'
+import {
+	DragHandle,
+	SortableItem,
+	SortableList,
+} from './sortableComponents'
 
 // actions 
 import { 
@@ -28,43 +27,6 @@ import {
 
 // styles
 import './../styles/index.scss'
-
-// drag handle component that allows user to reorder list by click-dragging item
-const DragHandle = SortableHandle(() => 
-
-	<div className="reorder">
-		<i className="fa fa-th" />
-	</div>
-
-);
-
-// individual task item
-const SortableItem = SortableElement(({ editTask, deleteTask, ...task }) =>
-
- 	<Task 
-		{...task} 
-		editTask={ editTask }
-		deleteTask={ deleteTask }
-		DragHandleComponent={ DragHandle } />
-
-);
-
-// task items container
-const SortableList = SortableContainer(({ tasks, ...actions }) => {
-
-  	return (
-
-  		<div>
-			{ tasks.map((task, index) => <SortableItem 
-											key={task.id || `item-${index}`} 
-											index={index} 
-											{...task} 
-											{...actions} />) }
-		</div>
-
-	);
-
-});
 
 class App extends Component{
 	constructor(props){

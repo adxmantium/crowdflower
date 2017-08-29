@@ -12,6 +12,11 @@ const resetData = {
   saving_tasks_err: false,
 }
 
+export const reorderTasks = ({ tasks, tasksOrder }) => ({
+  type: '_APP:REORDER_TASKS',
+  payload: { tasks, tasksOrder }, 
+});
+
 export const closeAlert = () => ({
   type: '_APP:CLOSE_ALERT',
   payload: resetData, 
@@ -22,9 +27,9 @@ export const resetSaved = () => ({
   payload: resetData,
 });
 
-export const addTask = ({ last_task_added }) => ({
+export const addTask = () => ({
   type: '_APP:ADD_TASK',
-  payload: { last_task_added }
+  payload: {}
 });
 
 export const editTask = payload => ({

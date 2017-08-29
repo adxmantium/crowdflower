@@ -2,6 +2,12 @@
 
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
+import { 
+	arrayMove,
+	SortableHandle,
+	SortableElement, 
+	SortableContainer, 
+} from 'react-sortable-hoc'
 
 // components
 import Task from './task'
@@ -17,10 +23,48 @@ import {
 	deleteTask,
 	closeAlert,
 	resetSaved,
+	reorderTasks,
 } from './../actions'
 
 // styles
 import './../styles/index.scss'
+
+// drag handle component that allows user to reorder list by click-dragging item
+const DragHandle = SortableHandle(() => 
+
+	<div className="reorder">
+		<i className="fa fa-th" />
+	</div>
+
+);
+
+// individual task item
+const SortableItem = SortableElement(({ editTask, deleteTask, ...task }) =>
+
+ 	<Task 
+		{...task} 
+		editTask={ editTask }
+		deleteTask={ deleteTask }
+		DragHandleComponent={ DragHandle } />
+
+);
+
+// task items container
+const SortableList = SortableContainer(({ tasks, ...actions }) => {
+
+  	return (
+
+  		<div>
+			{ tasks.map((task, index) => <SortableItem 
+											key={task.id || `item-${index}`} 
+											index={index} 
+											{...task} 
+											{...actions} />) }
+		</div>
+
+	);
+
+});
 
 class App extends Component{
 	constructor(props){
@@ -29,6 +73,7 @@ class App extends Component{
 		this._addTask = this._addTask.bind(this);
 		this._editTask = this._editTask.bind(this);
 		this._getTasks = this._getTasks.bind(this);
+		this._onSortEnd = this._onSortEnd.bind(this);
 		this._saveTasks = this._saveTasks.bind(this);
 		this._deleteTask = this._deleteTask.bind(this);
 		this._closeAlert = this._closeAlert.bind(this);
@@ -53,9 +98,11 @@ class App extends Component{
 		const { tasks: nextTasks } = nextAppState;
 
 		// if this states tasks length is not equal to next tasks length, enable save button
-		if( thisTasks.length !== nextTasks.length && 
-			thisAppState.fetched_tasks === nextAppState.fetched_tasks ){
-				this.state.disabled = false;
+		if( thisTasks.length !== nextTasks.length && thisAppState.fetched_tasks === nextAppState.fetched_tasks ){
+			this.state.disabled = false;
+
+		}else if( thisAppState.tasksOrder !== nextAppState.tasksOrder ){
+			this.state.disabled = false;
 
 		}else if( !thisAppState.saved && nextAppState.saved ){
 			this.state.disabled = true;
@@ -68,17 +115,15 @@ class App extends Component{
 	}
 
 	_addTask(){
-		const { dispatch, _app: { tasks } } = this.props;
-		let last_task_added = null;
-
-		// grab the most recent tasks id, if there are any tasks
-		if( tasks && tasks.length > 0 ) last_task_added = tasks[0].id;
-
-		dispatch( addTask({ last_task_added }) );
+		const { dispatch } = this.props;
+		dispatch( addTask() );
 	}
 
 	_editTask( task ){
 		const { dispatch } = this.props;
+
+		if( !task.name ) task.name = 'New Task';
+
 		dispatch( editTask( task ) );
 	}
 
@@ -99,6 +144,17 @@ class App extends Component{
 	_closeAlert(){
 		const { dispatch } = this.props;
 		dispatch( closeAlert() );
+	}
+
+	_onSortEnd({ oldIndex, newIndex }){
+		const { dispatch, _app } = this.props;
+
+		const tasks = arrayMove([..._app.tasks], oldIndex, newIndex);
+
+		const tasksOrder = tasks.map(task => task.id)
+								.reduce((order, id) => order += id, '');
+
+		dispatch( reorderTasks({ tasks, tasksOrder }) );
 	}
 
 	render(){
@@ -147,11 +203,13 @@ class App extends Component{
 					{ (!_app.error && _tasks.length === 0 && !_app.fetching_tasks) && 
 						<div className="empty-msg">You have 0 saved tasks. Click "Add Task" to create a new task</div> }
 
-					{ _tasks.map(task => <Task 
-											key={task.id} 
-											{...task} 
-											editTask={ this._editTask }
-											deleteTask={ this._deleteTask } />) }
+					<SortableList 
+						useDragHandle={true}
+						tasks={ _tasks } 
+						editTask={ this._editTask }
+						deleteTask={ this._deleteTask }
+						onSortEnd={ this._onSortEnd } />
+
 				</div>
 
 				{ ((_app.saved && disabled) || _app.saving_tasks_err) && 

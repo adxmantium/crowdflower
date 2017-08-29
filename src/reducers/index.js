@@ -15,6 +15,7 @@ export default function(state = init, action) {
     	case '_APP:CLOSE_ALERT':
 		case '_APP:SAVED_TASKS':
 		case '_APP:SAVING_TASKS':
+		case '_APP:REORDER_TASKS':
 		case '_APP:FETCHING_TASKS':
 			return {...state, ...action.payload};
 
@@ -50,14 +51,25 @@ export default function(state = init, action) {
 			};
 
 		case '_APP:ADD_TASK':
-			const { last_task_added } = action.payload;
 			const newTask = {
 				id: 1,
-				name: 'TASK',
+				name: '',
 				edited: false,
 			};
 
-			if( last_task_added ) newTask.id = last_task_added + 1;
+			if( state.tasks.length > 0 ){
+
+				// use map to return array of just task ids
+				// use reduce return max id
+				let highest_id = state
+								 .tasks
+								 .map( task => parseInt(task.id) )
+								 .reduce( (max, id) => id > max ? id : max , 1 );
+
+				console.log('highest_id: ', highest_id);
+
+				newTask.id = highest_id + 1;
+			}
 
 			tasks = [newTask, ...state.tasks];
 

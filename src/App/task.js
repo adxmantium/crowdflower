@@ -14,14 +14,12 @@ export default class Task extends Component {
 	}
 
 	render(){
-		const { id, name, editTask, deleteTask } = this.props;
+		const { id, name, editTask, deleteTask, DragHandleComponent } = this.props;
 
 		return (
-			<div className="task-item" draggable="true">
+			<div className="task-item">
 			
-				<div className="reorder">
-					<i className="fa fa-th" />
-				</div>
+				{ DragHandleComponent && <DragHandleComponent /> }
 
 				<input 
 					type="text"

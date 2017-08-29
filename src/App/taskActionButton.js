@@ -7,6 +7,10 @@ export default ({ label, disabled, classNames, onClick }) => (
 	<button 
 		className={ classNames } 
 		disabled={ disabled }
-		onClick={ onClick }>{ label }</button>
+		onClick={ onClick }>
+
+			{ label }
+
+	</button>
 		
 )

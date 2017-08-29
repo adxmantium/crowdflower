@@ -29763,6 +29763,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // /src/Team/index.js
 
+// libs
+
+
 // components
 
 
@@ -29888,6 +29891,7 @@ var App = function (_Component) {
 			    dispatch = _props3.dispatch,
 			    _app = _props3._app;
 
+			// arrayMove return new array of tasks with new order
 
 			var tasks = (0, _reactSortableHoc.arrayMove)([].concat(_toConsumableArray(_app.tasks)), oldIndex, newIndex);
 
@@ -32107,8 +32111,6 @@ exports.default = function () {
 				}).reduce(function (max, id) {
 					return id > max ? id : max;
 				}, 1);
-
-				console.log('highest_id: ', highest_id);
 
 				newTask.id = highest_id + 1;
 			}

@@ -73,8 +73,6 @@ export default function(state = init, action) {
 								 .map( task => parseInt(task.id) )
 								 .reduce( (max, id) => id > max ? id : max , 1 );
 
-				console.log('highest_id: ', highest_id);
-
 				newTask.id = highest_id + 1;
 			}
 

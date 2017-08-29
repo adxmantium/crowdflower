@@ -1,5 +1,6 @@
 // /src/Team/index.js
 
+// libs
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { arrayMove } from 'react-sortable-hoc'
@@ -115,6 +116,7 @@ class App extends Component{
 	_onSortEnd({ oldIndex, newIndex }){
 		const { dispatch, _app } = this.props;
 
+		// arrayMove return new array of tasks with new order
 		const tasks = arrayMove([..._app.tasks], oldIndex, newIndex);	
 
 		dispatch( reorderTasks({ tasks }) );

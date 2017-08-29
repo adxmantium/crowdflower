@@ -28,6 +28,7 @@ export default class Task extends Component {
 					placeholder="Enter task name"
 					onBlur={ e => editTask({ id, name }) }
 					ref={ input => { this._input = input; } }
+					onKeyPress={ ({ which }) => which === 13 && this._input.blur() }
 					onChange={ e => editTask({ id, name: e.target.value }) } />
 
 				<div className="trash" onClick={ () => deleteTask({ id }) }>

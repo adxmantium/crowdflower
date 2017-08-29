@@ -30038,6 +30038,10 @@ var Task = function (_Component) {
 					ref: function ref(input) {
 						_this2._input = input;
 					},
+					onKeyPress: function onKeyPress(_ref) {
+						var which = _ref.which;
+						return which === 13 && _this2._input.blur();
+					},
 					onChange: function onChange(e) {
 						return editTask({ id: id, name: e.target.value });
 					} }),
